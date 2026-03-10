@@ -230,6 +230,9 @@
       // 碰撞阈值：0 = 刚碰到就切，0.3 = 重叠30%人物宽度才切，1 = 完全遮住才切
       const OVERLAP_THRESHOLD = 0.4;
 
+      // iframe居中偏移：正值向左移，负值向右移
+      const OFFSET = 125;
+
       function checkCollision() {
         if (!charEl || !charEl.naturalWidth || !content) return;
 
@@ -238,12 +241,20 @@
         const charAspect = charEl.naturalWidth / charEl.naturalHeight;
         const charW = charAspect * vh * 0.95;
         const charRight = charW - vw * 0.04;
+        const cardWidth = content.offsetWidth;
+
+        // 人物右边缘到屏幕右边的剩余空间
+        const remainingSpace = vw - charRight;
+        // iframe右边距 = (剩余空间 - iframe宽度) / 2 + offset
+        const idealPad = (remainingSpace - cardWidth) / 2 + OFFSET;
+        document.body.style.paddingRight = Math.max(idealPad, vw * 0.03) + 'px';
 
         const cardLeft = content.getBoundingClientRect().left;
         const overlap = charRight - cardLeft;
         const collides = vw <= 768 || overlap > charW * OVERLAP_THRESHOLD;
 
         document.body.classList.toggle("mobile-mode", collides);
+        if (collides) document.body.style.paddingRight = '';
       }
 
       if (charEl.complete && charEl.naturalWidth) {
