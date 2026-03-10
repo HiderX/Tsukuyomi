@@ -1,0 +1,308 @@
+/*
+ * ツクヨミ — Uptime Kuma 日系粉彩主题
+ *
+ * 使用方法：
+ *   1. 登录 Uptime Kuma 后台
+ *   2. 进入 Status Pages → 选择你的状态页 → 点击 Edit
+ *   3. 滚动到 "Custom CSS" 区域
+ *   4. 将本文件全部内容复制粘贴进去，保存
+ *   5. 打开状态页公开链接，Cmd+Shift+R 强刷查看效果
+ *
+ * 配色参考 cho-kaguyahime.com + index.html 现有变量
+ * 亮色 body.light / 暗色 body.dark 两套样式
+ */
+
+/* ===== 1. 变量定义 ===== */
+
+:root {
+  --uk-bg: transparent;
+  --uk-text: #1e364a;
+  --uk-text-muted: #6b7f94;
+  --uk-accent: #ff635d;
+  --uk-border: #cbc4f8;
+  --uk-card-bg: rgba(255, 255, 255, 0.35);
+  --uk-card-hover: rgba(255, 255, 255, 0.55);
+  --uk-ok: #68CCDC;
+  --uk-warn: #f5babf;
+  --uk-down: #ff635d;
+  --uk-radius: 14px;
+  --uk-pad: 0.85rem;
+  --uk-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ===== 2. 全局基础 ===== */
+
+body {
+  background: var(--uk-bg) !important;
+  color: var(--uk-text) !important;
+  font-family: var(--uk-font) !important;
+}
+
+#app {
+  font-family: var(--uk-font) !important;
+}
+
+.container {
+  max-width: 100% !important;
+  padding: 0.5rem !important;
+}
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== 3. 亮色模式 (body.light) ===== */
+
+body.light {
+  background: var(--uk-bg) !important;
+}
+
+.light .shadow-box:not(.alert) {
+  background-color: rgba(255, 255, 255, 0.35) !important;
+  border: 1px solid var(--uk-border) !important;
+  border-radius: var(--uk-radius) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  padding: 10px !important;
+  margin: 5px !important;
+  text-decoration: none !important;
+}
+
+.light .monitor-list .item {
+  background: var(--uk-card-bg) !important;
+  border: 1px solid var(--uk-border) !important;
+  border-radius: var(--uk-radius) !important;
+  padding: var(--uk-pad) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03) !important;
+  transition: background 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.light .monitor-list .item:hover {
+  background-color: var(--uk-card-hover) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+.light .word {
+  color: var(--uk-text) !important;
+}
+
+.light .sidebar {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid var(--uk-border) !important;
+  border-radius: var(--uk-radius) !important;
+}
+
+/* ===== 4. 暗色模式 (body.dark) ===== */
+
+body.dark {
+  background: var(--uk-bg) !important;
+}
+
+.dark div {
+  color: #ECECEC;
+}
+
+.dark .shadow-box:not(.alert) {
+  background-color: rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid rgba(203, 196, 248, 0.3) !important;
+  border-radius: var(--uk-radius) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  padding: 10px !important;
+  margin: 5px !important;
+}
+
+.dark .monitor-list .item {
+  background: rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid rgba(203, 196, 248, 0.3) !important;
+  border-radius: var(--uk-radius) !important;
+  padding: var(--uk-pad) !important;
+  transition: background 0.2s ease !important;
+}
+
+.dark .monitor-list .item:hover,
+.dark .monitor-list .item.active {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .sidebar {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(203, 196, 248, 0.3) !important;
+  border-radius: var(--uk-radius) !important;
+}
+
+.dark h1, .dark h2 {
+  color: #ECECEC !important;
+}
+
+.dark .item-name {
+  color: #ECECEC !important;
+}
+
+.dark .wrap > .d-flex,
+.dark .refresh-info,
+.dark .refresh-info > div {
+  color: #9aa4b2 !important;
+}
+
+/* ===== 5. 标题 / 状态区域 ===== */
+
+h1, h2 {
+  color: var(--uk-text) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.hp-header-grp a,
+.hp-header-grp .title {
+  color: var(--uk-accent) !important;
+  font-weight: 600 !important;
+}
+
+.overall-status {
+  padding: 0.6rem 0 !important;
+}
+
+/* 状态文字和关键元素 */
+span[data-v-7d4a7f28],
+.item-name,
+div.description[data-v-7d4a7f28][data-v-b8247e57][contenteditable="true"],
+div[data-v-7d4a7f28][data-v-b8247e57].alert-heading.p-2,
+.alert-heading.p-2 > div,
+.alert-heading.p-2 > p,
+.alert-heading.p-2 > h1 {
+  color: var(--uk-ok) !important;
+  font-weight: 600 !important;
+}
+
+.item-name {
+  font-weight: 600 !important;
+  font-size: 1.02rem !important;
+  letter-spacing: 0.01em !important;
+  color: var(--uk-text) !important;
+}
+
+.wrap > .d-flex,
+.refresh-info,
+.refresh-info > div {
+  color: var(--uk-text-muted) !important;
+  font-size: 0.9rem !important;
+}
+
+/* ===== 6. 状态徽章 ===== */
+
+span.badge.bg-success,
+.badge.rounded-pill.bg-success,
+.badge.bg-success,
+.text-bg-success {
+  background-color: var(--uk-ok) !important;
+  color: #fff !important;
+}
+
+span.badge.bg-warning,
+.badge.rounded-pill.bg-warning,
+.badge.bg-warning,
+.text-bg-warning {
+  background-color: var(--uk-warn) !important;
+  color: #1e364a !important;
+}
+
+span.badge.bg-danger,
+.badge.rounded-pill.bg-danger,
+.badge.bg-danger,
+.text-bg-danger {
+  background-color: var(--uk-down) !important;
+  color: #fff !important;
+}
+
+.badge {
+  border-radius: 9999px !important;
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  padding: 0.3em 0.75em !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* ===== 7. 心跳条 ===== */
+
+div.beat.bg-success,
+.beat.bg-success,
+.beat.up,
+.beat[style*="background-color: rgb(92, 221, 139)"],
+.beat[style*="background-color: #5cdd8b"] {
+  background-color: var(--uk-ok) !important;
+}
+
+div.beat.bg-danger,
+.beat.bg-danger,
+.beat.down {
+  background-color: var(--uk-down) !important;
+}
+
+div.beat.bg-warning,
+.beat.bg-warning,
+.beat.pending,
+.beat.maintenance {
+  background-color: var(--uk-warn) !important;
+}
+
+.beat {
+  border-radius: 3px !important;
+  opacity: 0.7 !important;
+  transition: opacity 0.15s ease !important;
+}
+
+.beat:hover {
+  opacity: 1 !important;
+}
+
+/* ===== 8. 按钮 ===== */
+
+.btn-info {
+  color: #fff !important;
+  background-color: rgba(104, 204, 220, 0.7) !important;
+  border-color: transparent !important;
+}
+
+.btn-info:hover {
+  background-color: rgba(104, 204, 220, 0.9) !important;
+  border-color: transparent !important;
+}
+
+/* ===== 9. 链接 ===== */
+
+a {
+  color: var(--uk-ok) !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: var(--uk-accent) !important;
+  text-decoration: underline !important;
+}
+
+/* ===== 10. 页脚 ===== */
+
+footer,
+.footer-text {
+  color: var(--uk-text-muted) !important;
+  font-size: 0.85rem !important;
+}
+
+/* ===== 11. 无障碍 ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+a:focus,
+button:focus {
+  outline: 2px solid var(--uk-ok) !important;
+  outline-offset: 2px !important;
+}
