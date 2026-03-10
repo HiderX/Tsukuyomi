@@ -6,41 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>qkv.io</title>
   <link rel="icon" type="image/png" href="character_2thumb.png">
-  <!-- 引入 Claude 风格无衬线字体 Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* 参考了 cho-kaguyahime 的日系粉彩高亮配色 */
       --bg-color: #fdfafb;
-      /* 极浅极浅的粉白色 */
       --text-primary: #1e364a;
-      /* 深邃且高级的蓝黑色代替纯黑 */
       --text-secondary: #ff635d;
-      /* 副色用活力珊瑚红点亮 */
       --card-bg: rgba(255, 255, 255, 0.4);
-      /* 依旧保持通透的白色玻璃质感 */
       --border-color: #cbc4f8;
-      /* 用淡淡的紫粉色做边缘线 */
       --accent-logo: #ff635d;
-      /* 活力红 */
       --accent-badge-bg: rgba(108, 207, 238, 0.2);
-      /* 清新轻快的天蓝色底 */
       --accent-badge-text: #68CCDC;
-      /* 亮眼的天蓝色字 */
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        /* 深色模式同样保留标志性的撞色风格 */
         --bg-color: #1e1e1e;
         --text-primary: #ECECEC;
         --text-secondary: #f5babf;
-        /* 换成柔和一点的软粉色 */
         --card-bg: rgba(30, 30, 30, 0.4);
         --border-color: rgba(203, 196, 248, 0.3);
-        /* 暗化的紫粉边 */
         --accent-logo: #f5babf;
         --accent-badge-bg: rgba(108, 207, 238, 0.15);
         --accent-badge-text: #68CCDC;
@@ -59,83 +46,75 @@
       color: var(--text-primary);
       display: flex;
       justify-content: flex-end;
-      /* 桌面端让内容靠右侧对齐 */
       align-items: center;
-      padding-right: 5vw;
-      /* 右侧留一点白避免贴死 */
-      min-height: 100vh;
+      padding-right: 3vw;
+      height: 100vh;
       line-height: 1.6;
       overflow: hidden;
       position: relative;
     }
 
-    /* 懒加载背景图片层 */
-    #bg-image {
+    #bg-layer {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       z-index: 0;
-      object-fit: cover;
-      object-position: center;
-      /* 确保拖动窗口始终居中 */
+      background-image: url('character_bg.webp');
+      background-size: cover;
+      background-position: center;
       opacity: 0;
-      /* 默认隐藏，加载完成后通过动画渐显 */
-      transition: opacity 1.2s ease-in-out;
+      animation: fadeIn 1.2s ease-in-out forwards;
     }
 
-    /* 懒加载人物图层 */
     #character-image {
       position: absolute;
       bottom: 0;
       left: -4%;
-      /* 靠左留出边距 */
+      height: 95vh;
       width: auto;
-      /* 保持原生比例 */
-      height: 80%;
-      /* 高度占屏幕的 80%，避免人物过大 */
-      max-width: 50vw;
-      /* 限制最大宽度，防止小屏幕下占满 */
       z-index: 1;
-      /* 人物在背景之上 */
       object-fit: contain;
-      /* 完整显示人物不裁剪，依靠宽高控制大小 */
       object-position: bottom left;
-      /* 锁定在左下角 */
       opacity: 0;
-      transition: opacity 1.2s ease-in-out;
+      animation: fadeIn 1.2s ease-in-out 0.2s forwards;
       pointer-events: none;
-      /* 防止遮挡下方事件 */
+    }
+
+    .mobile-mode #bg-layer {
+      background-image: url('image.png');
+    }
+
+    .mobile-mode #character-image {
+      display: none !important;
     }
 
     /* 内容卡片 */
     .content {
       position: relative;
       z-index: 2;
-      /* 内容在最上方 */
       background-color: var(--card-bg);
       padding: 0;
-      /* 移除内边距，让 iframe 填满 */
       border-radius: 20px;
       border: 1px solid var(--border-color);
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
       backdrop-filter: blur(20px);
-      /* 毛玻璃效果，如果设置了背景图会非常好看 */
       -webkit-backdrop-filter: blur(20px);
-      width: 55vw;
-      /* 让卡片和人物瓜分宽度 */
-      min-width: 400px;
-      max-width: 800px;
-      /* 适当加宽以适应监控页面 */
-      height: 70vh;
-      /* 给出足够的高度显示状态 */
+      width: min(40vw, 600px);
+      min-width: 360px;
+      height: 80vh;
       min-height: 500px;
       overflow: hidden;
-      /* 防止 iframe 撑破圆角 */
       opacity: 0;
       transform: translateX(20px);
       animation: slideInRight 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
     }
 
     @keyframes slideInRight {
@@ -145,28 +124,27 @@
       }
     }
 
-    @media (max-width: 1024px) {
-
-      /* 如果屏幕或平板屏幕太窄，退回到上下排版或者直接盖在上面 */
-      body {
-        justify-content: center;
-        align-items: flex-start;
-        padding-top: 5vh;
-        padding-right: 0;
-      }
-
-      .content {
-        width: 90%;
-        min-width: 0;
-      }
-
-      #character-image {
-        opacity: 0.6;
-        /* 让人物变半透明，防止喧宾夺主挡住内容 */
-      }
+    .uptime-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 20px;
+      background: transparent;
     }
 
-    /* 顶部 Logo 占位符 */
+    .mobile-mode {
+      justify-content: center;
+      align-items: center;
+      padding-right: 0;
+    }
+
+    .mobile-mode .content {
+      width: min(85vw, 560px);
+      height: 70vh;
+      min-height: 0;
+      min-width: 0;
+    }
+
     .logo {
       margin-bottom: 2rem;
       display: inline-flex;
@@ -176,9 +154,7 @@
       height: 48px;
       border-radius: 12px;
       background: var(--accent-logo);
-      /* 这里改成活力红或柔粉 */
       color: #fff;
-      /* 字体强制设为白 */
       font-weight: 600;
       font-size: 1.25rem;
       letter-spacing: -0.05em;
@@ -197,23 +173,18 @@
       margin-bottom: 2rem;
     }
 
-    /* 优雅的状态指示器 */
     .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 8px 16px;
       background: var(--accent-badge-bg);
-      /* 天蓝透明底 */
       color: var(--accent-badge-text);
-      /* 天蓝色字 */
       border-radius: 9999px;
       font-size: 0.875rem;
       font-weight: 500;
       transition: background 0.3s ease;
     }
-
-    /* 原本这里针对 dark 有复写，现在已经把变量做到 root 里了，可以去掉 */
 
     .status-dot {
       width: 8px;
@@ -237,71 +208,52 @@
         opacity: 0.5;
       }
     }
-
-    /* Uptime Kuma Iframe */
-    .uptime-iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 20px;
-      /* 匹配外层圆角 */
-      background: transparent;
-      /* 允许透明卡片透出 */
-    }
   </style>
 </head>
 
 <body>
 
-  <!-- 
-      ===============================================================
-      【背景与人物图配置】
-      你可以根据需求替换这里的 data-bg-src 路径
-      ===============================================================
-    -->
-  <img id="bg-image" data-bg-src="character_bg.webp" data-bg-mobile-src="character_bg.webp" alt="background"
-    aria-hidden="true" />
-  <img id="character-image" data-bg-src="character_2main.png" data-bg-mobile-src="character_2main.png" alt="character"
-    aria-hidden="true" />
+  <div id="bg-layer"></div>
+  <img id="character-image" src="character_2main.png" alt="character" aria-hidden="true" />
 
   <div class="content">
     <iframe src="https://status.qkv.io/status/default" class="uptime-iframe" title="System Status"
       loading="lazy"></iframe>
   </div>
 
-  <!-- 预加载及渐显动画控制 -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const isMobile = window.innerWidth <= 768;
+    (function () {
+      const charEl = document.getElementById("character-image");
+      const content = document.querySelector(".content");
+      const bgLayer = document.getElementById("bg-layer");
 
-      const loadImg = (id) => {
-        const imgEl = document.getElementById(id);
-        if (!imgEl) return;
+      // 碰撞阈值：0 = 刚碰到就切，0.3 = 重叠30%人物宽度才切，1 = 完全遮住才切
+      const OVERLAP_THRESHOLD = 0.4;
 
-        const src = isMobile
-          ? (imgEl.getAttribute("data-bg-mobile-src") || imgEl.getAttribute("data-bg-src"))
-          : imgEl.getAttribute("data-bg-src");
+      function checkCollision() {
+        if (!charEl || !charEl.naturalWidth || !content) return;
 
-        if (src) {
-          const img = new Image();
-          img.src = src;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const charAspect = charEl.naturalWidth / charEl.naturalHeight;
+        const charW = charAspect * vh * 0.95;
+        const charRight = charW - vw * 0.04;
 
-          img.onload = () => {
-            imgEl.src = src;
-            requestAnimationFrame(() => {
-              imgEl.style.opacity = "1";
-            });
-          };
+        const cardLeft = content.getBoundingClientRect().left;
+        const overlap = charRight - cardLeft;
+        const collides = vw <= 768 || overlap > charW * OVERLAP_THRESHOLD;
 
-          img.onerror = () => {
-            imgEl.style.display = "none";
-          };
-        }
-      };
+        document.body.classList.toggle("mobile-mode", collides);
+      }
 
-      loadImg("bg-image");
-      loadImg("character-image");
-    });
+      if (charEl.complete && charEl.naturalWidth) {
+        checkCollision();
+      } else {
+        charEl.addEventListener("load", checkCollision);
+      }
+
+      window.addEventListener("resize", checkCollision);
+    })();
   </script>
 </body>
 
