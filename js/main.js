@@ -1,3 +1,19 @@
+document.documentElement.classList.add('site-loading');
+
+window.__shouldUseMobileLayout = function () {
+  const vw = window.innerWidth;
+  const isTouchLike =
+    (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
+    (window.matchMedia && window.matchMedia('(hover: none)').matches) ||
+    ('ontouchstart' in window) ||
+    (navigator.maxTouchPoints && navigator.maxTouchPoints > 0);
+  return vw <= 768 || isTouchLike;
+};
+
+if (window.__shouldUseMobileLayout()) {
+  document.documentElement.classList.add('mobile-mode');
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   (async function () {
     const root = document.documentElement;
