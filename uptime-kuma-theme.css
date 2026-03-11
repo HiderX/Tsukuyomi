@@ -1,308 +1,175 @@
-/*
- * ツクヨミ — Uptime Kuma 日系粉彩主题
- *
- * 使用方法：
- *   1. 登录 Uptime Kuma 后台
- *   2. 进入 Status Pages → 选择你的状态页 → 点击 Edit
- *   3. 滚动到 "Custom CSS" 区域
- *   4. 将本文件全部内容复制粘贴进去，保存
- *   5. 打开状态页公开链接，Cmd+Shift+R 强刷查看效果
- *
- * 配色参考 cho-kaguyahime.com + index.html 现有变量
- * 亮色 body.light / 暗色 body.dark 两套样式
- */
+/* 自定义字体定义 */  
+@font-face {  
+  font-family: '1666963922';  
+  src: url('https://jsd.cdn.zzko.cn/gh/54ayao/ACG@main/static/fonts/1666963922.woff') format('woff');  
+  font-weight: normal;  
+  font-style: normal;  
+}  
 
-/* ===== 1. 变量定义 ===== */
-
-:root {
-  --uk-bg: transparent;
-  --uk-text: #1e364a;
-  --uk-text-muted: #6b7f94;
-  --uk-accent: #ff635d;
-  --uk-border: #cbc4f8;
-  --uk-card-bg: rgba(255, 255, 255, 0.35);
-  --uk-card-hover: rgba(255, 255, 255, 0.55);
-  --uk-ok: #68CCDC;
-  --uk-warn: #f5babf;
-  --uk-down: #ff635d;
-  --uk-radius: 14px;
-  --uk-pad: 0.85rem;
-  --uk-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-/* ===== 2. 全局基础 ===== */
-
-body {
-  background: var(--uk-bg) !important;
-  color: var(--uk-text) !important;
-  font-family: var(--uk-font) !important;
-}
-
-#app {
-  font-family: var(--uk-font) !important;
-}
-
-.container {
-  max-width: 100% !important;
-  padding: 0.5rem !important;
-}
-
-/* 隐藏滚动条 */
-::-webkit-scrollbar {
-  display: none;
-}
-
-/* ===== 3. 亮色模式 (body.light) ===== */
+/* 全局样式 */  
+body {  
+  font-family: '1666963922', sans-serif; /* 使用自定义字体 */  
+}  
 
 body.light {
-  background: var(--uk-bg) !important;
+    background-color:rgba(255,255,255,0.5)
 }
 
-.light .shadow-box:not(.alert) {
-  background-color: rgba(255, 255, 255, 0.35) !important;
-  border: 1px solid var(--uk-border) !important;
-  border-radius: var(--uk-radius) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  padding: 10px !important;
-  margin: 5px !important;
-  text-decoration: none !important;
+      
+
+/* 导航栏链接悬停样式 */  
+.navbar a:hover {  
+  text-decoration: underline;  
+}  
+
+/* 卡片样式 */  
+.card {  
+  background-color: rgba(255,255,255,0.9);  
+  border-radius: 5px;  
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  
+  margin-bottom: 20px;  
+  padding: 20px;  
+}  
+
+/* 卡片标题样式 */  
+.card-title {  
+  font-size: 18px;  
+  font-weight: bold;  
+  margin-bottom: 10px;  
+}  
+
+
+/* 在明亮主题下，应用不同的背景色及75%透明度 */   
+.shadow-box {  
+  background-color: rgba(255, 255, 255, 0.75);  
+  padding: 10px;  
+  margin: 5px;  
+  border-radius: 10px;  
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  
+text-decoration: none; 
+
+}  
+/* 在暗色主题下，应用不同的背景色及65%透明度 */  
+.dark .shadow-box:not(.alert) {  
+  background-color: rgba(0, 0, 0, 0.65); 
+   padding: 20px;  
+  margin: 10px;  
+  border-radius: 5px;  
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  
+}
+/* 侧边栏样式 */  
+.sidebar {  
+  background-color: rgba(255, 255, 255, 0.9);  
+  padding: 20px;  
+  margin: 10px;  
+  border-radius: 5px;  
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  
+}  
+
+/* 特定元素和类的样式 */     
+span[data-v-7d4a7f28],  
+.item-name,  
+div.description[data-v-7d4a7f28][data-v-b8247e57][contenteditable="true"],  
+div[data-v-7d4a7f28][data-v-b8247e57].alert-heading.p-2,  
+.refresh-info > div,  
+.alert-heading.p-2 > div,  
+.alert-heading.p-2 > p, 
+.alert-heading.p-2 > h1 {  
+  background-image: linear-gradient(90deg, #07c160, #fb6bea 25%, #3aedff 50%, #fb6bea 75%, #28d079);  
+  font-family: '1666963922', sans-serif;  
+  -webkit-text-fill-color: transparent;  
+  -webkit-background-clip: text;  
+  background-size: 400% 100%;  
+  animation: wzw 10s linear infinite;  
+}  
+
+/* 动画关键帧定义 */  
+@keyframes wzw {  
+  0% {  
+      background-position: 0% 50%;  
+  }  
+  50% {  
+      background-position: 100% 50%;  
+  }  
+  100% {  
+      background-position: 0% 50%;  
+  }  
+}
+#app {  
+font-family: '1666963922', BlinkMacSystemFont, 'segoe ui', Roboto, 'helvetica neue', Arial, 'noto sans', sans-serif, 'apple color emoji', 'segoe ui emoji', 'segoe ui symbol', 'noto color emoji' !important;
 }
 
-.light .monitor-list .item {
-  background: var(--uk-card-bg) !important;
-  border: 1px solid var(--uk-border) !important;
-  border-radius: var(--uk-radius) !important;
-  padding: var(--uk-pad) !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03) !important;
-  transition: background 0.2s ease, box-shadow 0.2s ease !important;
+/* ==================================
+1. 基础样式重置（消除默认边距/溢出）
+================================== */
+/* 重置 html/body 默认边距，禁止页面自身滚动（由 iframe 控制滚动） */
+html,
+body {
+margin: 0;
+padding: 0;
+overflow: hidden;
 }
 
-.light .monitor-list .item:hover {
-  background-color: var(--uk-card-hover) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+
+/* ==================================
+2. iframe 适配核心样式（页面缩放逻辑）
+================================== */
+/* 页面最外层容器缩放配置（适配 iframe 大小）
+ 注：若实际外层容器不是 .app，需替换为真实类名（如 .container、.status-page 等） */
+.app {
+/* 1. 基准尺寸（需根据页面实际设计稿调整，此处为示例值） */
+width: 1000px;  /* 页面理想宽度（基准） */
+height: 600px;  /* 页面理想高度（基准） */
+margin: 0 auto; /* 可选：让容器水平居中（若 iframe 宽度大于基准宽度时生效） */
+
+/* 2. 按 iframe 宽度自动缩放（核心适配逻辑） */
+transform-origin: top left; /* 缩放原点：左上角（避免缩放偏移） */
+transform: scale(calc(100vw / 1000)); /* 缩放比例 = iframe 宽度 ÷ 基准宽度 */
+
+/* 3. 同步缩放高度（保证页面比例不变形） */
+height: calc(600 * (100vw / 1000) * 1px);
 }
 
-.light .word {
-  color: var(--uk-text) !important;
+
+/* ==================================
+3. 元素隐藏（按需隐藏指定标签/容器）
+================================== */
+/* 隐藏所有 h1 标签（全局） 
+h1 {
+display: none !important;
+}*/
+
+/* 隐藏含“服务”文本的目标 h2 标签（精准匹配 data-v 属性和类名） */
+h2.group-title[data-v-f71ca08e] {
+display: none !important;
 }
 
-.light .sidebar {
-  background-color: rgba(255, 255, 255, 0.8) !important;
-  border: 1px solid var(--uk-border) !important;
-  border-radius: var(--uk-radius) !important;
+/* 隐藏指定 alert 容器（匹配 data-v 属性和类名） */
+div.alert-heading.p-2[data-v-b8247e57] {
+display: none !important;
 }
 
-/* ===== 4. 暗色模式 (body.dark) ===== */
-
-body.dark {
-  background: var(--uk-bg) !important;
+/* 隐藏页面底部 footer 区域（全局） */
+footer {
+display: none !important;
 }
 
-.dark div {
-  color: #ECECEC;
+
+/* ==================================
+4. 间距调整（覆盖默认 padding/margin）
+==================================
+清除 .p-4 类的所有内边距（上下左右均为 0） 
+.p-4 {
+padding: 0 !important;
 }
 
-.dark .shadow-box:not(.alert) {
-  background-color: rgba(0, 0, 0, 0.45) !important;
-  border: 1px solid rgba(203, 196, 248, 0.3) !important;
-  border-radius: var(--uk-radius) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  padding: 10px !important;
-  margin: 5px !important;
+清除 .mb-4 类的底部外边距（设为 0） 
+.mb-4 {
+margin-bottom: 0 !important;
 }
 
-.dark .monitor-list .item {
-  background: rgba(0, 0, 0, 0.35) !important;
-  border: 1px solid rgba(203, 196, 248, 0.3) !important;
-  border-radius: var(--uk-radius) !important;
-  padding: var(--uk-pad) !important;
-  transition: background 0.2s ease !important;
+调整 .mt-4 类的顶部外边距（从 1.5rem 改为 0.5rem） 
+.mt-4 {
+margin-top: 0.5rem !important;
 }
-
-.dark .monitor-list .item:hover,
-.dark .monitor-list .item.active {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-.dark .sidebar {
-  background-color: rgba(0, 0, 0, 0.6) !important;
-  border: 1px solid rgba(203, 196, 248, 0.3) !important;
-  border-radius: var(--uk-radius) !important;
-}
-
-.dark h1, .dark h2 {
-  color: #ECECEC !important;
-}
-
-.dark .item-name {
-  color: #ECECEC !important;
-}
-
-.dark .wrap > .d-flex,
-.dark .refresh-info,
-.dark .refresh-info > div {
-  color: #9aa4b2 !important;
-}
-
-/* ===== 5. 标题 / 状态区域 ===== */
-
-h1, h2 {
-  color: var(--uk-text) !important;
-  font-weight: 600 !important;
-  letter-spacing: -0.02em !important;
-}
-
-.hp-header-grp a,
-.hp-header-grp .title {
-  color: var(--uk-accent) !important;
-  font-weight: 600 !important;
-}
-
-.overall-status {
-  padding: 0.6rem 0 !important;
-}
-
-/* 状态文字和关键元素 */
-span[data-v-7d4a7f28],
-.item-name,
-div.description[data-v-7d4a7f28][data-v-b8247e57][contenteditable="true"],
-div[data-v-7d4a7f28][data-v-b8247e57].alert-heading.p-2,
-.alert-heading.p-2 > div,
-.alert-heading.p-2 > p,
-.alert-heading.p-2 > h1 {
-  color: var(--uk-ok) !important;
-  font-weight: 600 !important;
-}
-
-.item-name {
-  font-weight: 600 !important;
-  font-size: 1.02rem !important;
-  letter-spacing: 0.01em !important;
-  color: var(--uk-text) !important;
-}
-
-.wrap > .d-flex,
-.refresh-info,
-.refresh-info > div {
-  color: var(--uk-text-muted) !important;
-  font-size: 0.9rem !important;
-}
-
-/* ===== 6. 状态徽章 ===== */
-
-span.badge.bg-success,
-.badge.rounded-pill.bg-success,
-.badge.bg-success,
-.text-bg-success {
-  background-color: var(--uk-ok) !important;
-  color: #fff !important;
-}
-
-span.badge.bg-warning,
-.badge.rounded-pill.bg-warning,
-.badge.bg-warning,
-.text-bg-warning {
-  background-color: var(--uk-warn) !important;
-  color: #1e364a !important;
-}
-
-span.badge.bg-danger,
-.badge.rounded-pill.bg-danger,
-.badge.bg-danger,
-.text-bg-danger {
-  background-color: var(--uk-down) !important;
-  color: #fff !important;
-}
-
-.badge {
-  border-radius: 9999px !important;
-  font-weight: 500 !important;
-  font-size: 0.85rem !important;
-  padding: 0.3em 0.75em !important;
-  letter-spacing: 0.02em !important;
-}
-
-/* ===== 7. 心跳条 ===== */
-
-div.beat.bg-success,
-.beat.bg-success,
-.beat.up,
-.beat[style*="background-color: rgb(92, 221, 139)"],
-.beat[style*="background-color: #5cdd8b"] {
-  background-color: var(--uk-ok) !important;
-}
-
-div.beat.bg-danger,
-.beat.bg-danger,
-.beat.down {
-  background-color: var(--uk-down) !important;
-}
-
-div.beat.bg-warning,
-.beat.bg-warning,
-.beat.pending,
-.beat.maintenance {
-  background-color: var(--uk-warn) !important;
-}
-
-.beat {
-  border-radius: 3px !important;
-  opacity: 0.7 !important;
-  transition: opacity 0.15s ease !important;
-}
-
-.beat:hover {
-  opacity: 1 !important;
-}
-
-/* ===== 8. 按钮 ===== */
-
-.btn-info {
-  color: #fff !important;
-  background-color: rgba(104, 204, 220, 0.7) !important;
-  border-color: transparent !important;
-}
-
-.btn-info:hover {
-  background-color: rgba(104, 204, 220, 0.9) !important;
-  border-color: transparent !important;
-}
-
-/* ===== 9. 链接 ===== */
-
-a {
-  color: var(--uk-ok) !important;
-  text-decoration: none !important;
-}
-
-a:hover {
-  color: var(--uk-accent) !important;
-  text-decoration: underline !important;
-}
-
-/* ===== 10. 页脚 ===== */
-
-footer,
-.footer-text {
-  color: var(--uk-text-muted) !important;
-  font-size: 0.85rem !important;
-}
-
-/* ===== 11. 无障碍 ===== */
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-a:focus,
-button:focus {
-  outline: 2px solid var(--uk-ok) !important;
-  outline-offset: 2px !important;
-}
+*/
