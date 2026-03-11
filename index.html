@@ -9,9 +9,117 @@
     href="https://cdn.jsdelivr.net/gh/HiderX/Tsukuyomi@latest/img/character_2thumb.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="image" href="img/ball.png" fetchpriority="high">
+  <link rel="preload" as="image" href="img/loading_txt.webp" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="js/main.js"></script>
+  <script>
+    document.documentElement.classList.add('site-loading');
+
+    window.__shouldUseMobileLayout = function () {
+      const vw = window.innerWidth;
+      const isTouchLike =
+        (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
+        (window.matchMedia && window.matchMedia('(hover: none)').matches) ||
+        ('ontouchstart' in window) ||
+        (navigator.maxTouchPoints && navigator.maxTouchPoints > 0);
+      return vw <= 768 || isTouchLike;
+    };
+
+    if (window.__shouldUseMobileLayout()) {
+      document.documentElement.classList.add('mobile-mode');
+    }
+  </script>
+  <style>
+    :root {
+      --loading-vw-min: 1200;
+    }
+
+    @media screen and (max-width: 768px) {
+      :root {
+        --loading-vw-min: 750;
+      }
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      background: #1e364a;
+    }
+
+    html.site-loading body {
+      cursor: progress;
+    }
+
+    .hd {
+      display: block;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .loading {
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: #1e364a;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+
+    .loading.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loading__mb {
+      width: min(calc(240 / var(--loading-vw-min) * 100vw), 240px);
+      height: min(calc(240 / var(--loading-vw-min) * 100vw), 240px);
+      overflow: hidden;
+      background: url('img/ball.png') no-repeat 0 0 / auto 100%;
+      animation: mirrorball 1s steps(9) infinite;
+    }
+
+    .loading__label {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      margin-top: min(calc(60 / var(--loading-vw-min) * 100vw), 60px);
+      height: min(calc(45 / var(--loading-vw-min) * 100vw), 45px);
+      background: url('img/loading_txt.webp') no-repeat center center / contain;
+      z-index: 10;
+    }
+
+    @media screen and (max-width: 768px) {
+      .loading__label {
+        margin-top: calc(70 / var(--loading-vw-min) * 100vw);
+        height: calc(68 / var(--loading-vw-min) * 100vw);
+      }
+    }
+
+    @keyframes mirrorball {
+      0% {
+        background-position: 0 0;
+      }
+
+      to {
+        background-position: 100% 0;
+      }
+    }
+  </style>
   <link rel="stylesheet" href="css/main.css">
+  <script src="js/main.js" defer></script>
 </head>
 
 <body>
