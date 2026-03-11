@@ -214,9 +214,9 @@
         resolution: window.devicePixelRatio || 1,
       });
 
-      const CDN = 'https://cdn.jsdelivr.net/gh/HiderX/Tsukuyomi@latest';
+      const R2_BASE = 'https://cdn.qkv.io';
       const model = await PIXI.live2d.Live2DModel.from(
-        `${CDN}/live2d/yachiyo-kaguya/八千代辉夜姬.model3.json`
+        `${R2_BASE}/live2d/yachiyo-kaguya/八千代辉夜姬.model3.json`
       );
       app.stage.addChild(model);
 
