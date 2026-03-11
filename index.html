@@ -267,13 +267,10 @@
 
       let introPlaying = false;
       const im = model.internalModel;
-      const origUpdateFocus = im.updateFocus.bind(im);
       const origEyeBlink = im.eyeBlink;
 
       // 使用“头部位置 → 鼠标位置”的向量来追焦
       document.addEventListener('pointermove', (e) => {
-        if (introPlaying) return;
-
         const bounds = model.getBounds();
         const centerX = bounds.x + bounds.width / 2;
         const centerY = bounds.y + bounds.height / 2;
@@ -297,18 +294,16 @@
       async function playIntro() {
         if (introPlaying) return;
         introPlaying = true;
-        im.updateFocus = () => {};
+
         im.eyeBlink = undefined;
-        im.focusController.targetX = 0;
-        im.focusController.targetY = 0;
-        im.focusController.x = 0;
-        im.focusController.y = 0;
+
         try {
           await model.motion('Intro', 0, 3);
-        } catch (_) {}
-        im.updateFocus = origUpdateFocus;
-        im.eyeBlink = origEyeBlink;
-        introPlaying = false;
+        } catch (e) { console.error('Intro error:', e); }
+        finally {
+          im.eyeBlink = origEyeBlink;
+          introPlaying = false;
+        }
       }
 
       function onFirstInteraction() {
