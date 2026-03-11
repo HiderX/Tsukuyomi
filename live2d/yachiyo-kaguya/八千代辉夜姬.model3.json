@@ -41,6 +41,14 @@
 					"FadeOutTime": 0.4
 				}
 			],
+			"Intro": [
+				{
+					"File": "motions/yachiyo_intro.motion3.json",
+					"FadeInTime": 0.3,
+					"FadeOutTime": 0.5,
+					"Sound": "yahoo.m4a"
+				}
+			],
 			"ReactError": [
 				{
 					"File": "motions/yachiyo_react_error.motion3.json",

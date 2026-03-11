@@ -265,13 +265,59 @@
         model.y = cardBottom - charH + 160;
       }
 
-      // 眼睛跟随鼠标（canvas 本身 pointer-events: none，通过 document 监听）
+      let introPlaying = false;
+      const im = model.internalModel;
+      const origUpdateFocus = im.updateFocus.bind(im);
+      const origEyeBlink = im.eyeBlink;
+
+      // 使用“头部位置 → 鼠标位置”的向量来追焦
       document.addEventListener('pointermove', (e) => {
-        model.focus(e.clientX, e.clientY);
+        if (introPlaying) return;
+
+        const bounds = model.getBounds();
+        const centerX = bounds.x + bounds.width / 2;
+        const centerY = bounds.y + bounds.height / 2;
+        const headX = centerX;
+        const headY = bounds.y + bounds.height * 0.25;
+
+        // 头部指向鼠标的向量（屏幕空间）
+        let dx = e.clientX - headX;
+        let dy = e.clientY - headY;
+
+        const offsetY = centerY - headY;
+        const adjustedX = headX + dx;
+        const adjustedY = headY + dy + offsetY;
+
+        model.focus(adjustedX, adjustedY);
       });
 
       layout();
       window.addEventListener('resize', layout);
+
+      async function playIntro() {
+        if (introPlaying) return;
+        introPlaying = true;
+        im.updateFocus = () => {};
+        im.eyeBlink = undefined;
+        im.focusController.targetX = 0;
+        im.focusController.targetY = 0;
+        im.focusController.x = 0;
+        im.focusController.y = 0;
+        try {
+          await model.motion('Intro', 0, 3);
+        } catch (_) {}
+        im.updateFocus = origUpdateFocus;
+        im.eyeBlink = origEyeBlink;
+        introPlaying = false;
+      }
+
+      function onFirstInteraction() {
+        playIntro();
+        document.removeEventListener('click', onFirstInteraction);
+        document.removeEventListener('touchstart', onFirstInteraction);
+      }
+      document.addEventListener('click', onFirstInteraction);
+      document.addEventListener('touchstart', onFirstInteraction);
     })();
   </script>
 </body>
