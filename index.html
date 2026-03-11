@@ -198,9 +198,9 @@
       loading="lazy" allowtransparency="true"></iframe>
   </div>
 
-  <script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/pixi.js@6.5.10/dist/browser/pixi.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/cubism4.min.js"></script>
+  <script src="js/live2dcubismcore.min.js"></script>
+  <script src="js/pixi.min.js"></script>
+  <script src="js/cubism4.min.js"></script>
   <script>
     (async function () {
       const canvas = document.getElementById('character-canvas');
@@ -223,38 +223,46 @@
       const origH = model.height;
       const charAspect = origW / origH;
 
-      // 碰撞阈值：0 = 刚碰到就切，0.3 = 重叠30%人物宽度才切，1 = 完全遮住才切
-      const OVERLAP_THRESHOLD = 0.4;
-      // iframe居中偏移：正值向左移，负值向右移
-      const OFFSET = 125;
+      // 宽度充足时，左右边距占视口宽度的比例（你调好的 0.2 = 20%）
+      const IDEAL_MARGIN_RATIO = 0.2;
 
       function layout() {
         const vw = window.innerWidth;
         const vh = window.innerHeight;
 
-        // 与原来 img 相同的规则：height = 95vh，left = -4%
+        // 先清除 mobile-mode，确保用非移动端的卡片宽度来计算
+        document.body.classList.remove('mobile-mode');
+        document.body.style.paddingRight = '';
+
         const charH = vh * 0.95;
         const scale = charH / origH;
         model.scale.set(scale);
-        model.x = vw * (-0.04);
-        model.y = vh - charH;
-
         const charW = charAspect * charH;
-        const charRight = charW - vw * 0.04;
         const cardWidth = content.offsetWidth;
 
-        // 人物右边缘到屏幕右边的剩余空间
-        const remainingSpace = vw - charRight;
-        // iframe右边距 = (剩余空间 - iframe宽度) / 2 + offset
-        const idealPad = (remainingSpace - cardWidth) / 2 + OFFSET;
-        document.body.style.paddingRight = Math.max(idealPad, vw * 0.03) + 'px';
+        // 理想边距（宽度充足时）
+        const idealMargin = vw * IDEAL_MARGIN_RATIO;
+        // 两边能均分到的最大空间（模型+卡片放进去后的剩余 ÷ 2）
+        const maxMargin = (vw - charW - cardWidth) / 2;
+        // 取较小值 → 窗口缩窄时两侧同步缩小，始终左右等宽；允许缩到 0 后重叠
+        const margin = Math.max(0, Math.min(idealMargin, maxMargin));
 
-        const cardLeft = content.getBoundingClientRect().left;
-        const overlap = charRight - cardLeft;
-        const collides = vw <= 768 || overlap > charW * OVERLAP_THRESHOLD;
+        // margin=0 后继续缩窄，人物和卡片开始重叠
+        const overlap = Math.max(0, charW + cardWidth - vw);
+        const cardTooNarrow = cardWidth / content.offsetHeight < 5 / 9;
+        const collides = vw <= 768 || cardTooNarrow;
 
-        document.body.classList.toggle('mobile-mode', collides);
-        if (collides) document.body.style.paddingRight = '';
+
+        if (collides) {
+          document.body.classList.add('mobile-mode');
+        } else {
+          document.body.style.paddingRight = margin + 'px';
+        }
+
+        // 人物底部与 iframe 卡片底部对齐
+        const cardBottom = content.getBoundingClientRect().bottom;
+        model.x = margin;
+        model.y = cardBottom - charH + 160;
       }
 
       // 眼睛跟随鼠标（canvas 本身 pointer-events: none，通过 document 监听）
