@@ -10,30 +10,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-color: #fdfafb;
-      --text-primary: #1e364a;
-      --text-secondary: #ff635d;
-      --card-bg: rgba(255, 255, 255, 0.4);
-      --border-color: #cbc4f8;
-      --accent-logo: #ff635d;
-      --accent-badge-bg: rgba(108, 207, 238, 0.2);
-      --accent-badge-text: #68CCDC;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-color: #1e1e1e;
-        --text-primary: #ECECEC;
-        --text-secondary: #f5babf;
-        --card-bg: rgba(30, 30, 30, 0.4);
-        --border-color: rgba(203, 196, 248, 0.3);
-        --accent-logo: #f5babf;
-        --accent-badge-bg: rgba(108, 207, 238, 0.15);
-        --accent-badge-text: #68CCDC;
-      }
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -94,13 +70,18 @@
     .content {
       position: relative;
       z-index: 2;
-      background-color: var(--card-bg);
+      background-color: rgba(255, 255, 255, 0.2);
+      /* background: transparent; */
       padding: 0;
       border-radius: 20px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      /* border: 1px solid rgba(255, 255, 255, 0.1); */
+      /* box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); */
+      border: none;
+      box-shadow: none;
+      /* 背景模糊 */
+      /* backdrop-filter: blur(20px); */
+      /* -webkit-backdrop-filter: blur(20px); */
+
       width: min(40vw, 600px);
       min-width: 360px;
       height: 80vh;
@@ -218,7 +199,7 @@
 
   <div class="content">
     <iframe src="https://status.qkv.io/status/default" class="uptime-iframe" title="System Status"
-      loading="lazy"></iframe>
+      loading="lazy" allowtransparency="true"></iframe>
   </div>
 
   <script>
