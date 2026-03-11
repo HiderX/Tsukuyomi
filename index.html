@@ -44,15 +44,11 @@
       animation: fadeIn 1.2s ease-in-out forwards;
     }
 
-    #character-image {
+    #character-canvas {
       position: absolute;
-      bottom: 0;
-      left: -4%;
-      height: 95vh;
-      width: auto;
+      top: 0;
+      left: 0;
       z-index: 1;
-      object-fit: contain;
-      object-position: bottom left;
       opacity: 0;
       animation: fadeIn 1.2s ease-in-out 0.2s forwards;
       pointer-events: none;
@@ -62,7 +58,7 @@
       background-image: url('image.webp');
     }
 
-    .mobile-mode #character-image {
+    .mobile-mode #character-canvas {
       display: none !important;
     }
 
@@ -70,7 +66,7 @@
     .content {
       position: relative;
       z-index: 2;
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: rgba(255, 255, 255, 0.4);
       /* background: transparent; */
       padding: 0;
       border-radius: 20px;
@@ -195,32 +191,55 @@
 <body>
 
   <div id="bg-layer"></div>
-  <img id="character-image" src="character_2main.png" alt="character" aria-hidden="true" />
+  <canvas id="character-canvas"></canvas>
 
   <div class="content">
     <iframe src="https://status.qkv.io/status/default" class="uptime-iframe" title="System Status"
       loading="lazy" allowtransparency="true"></iframe>
   </div>
 
+  <script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pixi.js@6.5.10/dist/browser/pixi.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/cubism4.min.js"></script>
   <script>
-    (function () {
-      const charEl = document.getElementById("character-image");
-      const content = document.querySelector(".content");
-      const bgLayer = document.getElementById("bg-layer");
+    (async function () {
+      const canvas = document.getElementById('character-canvas');
+      const content = document.querySelector('.content');
+
+      const app = new PIXI.Application({
+        view: canvas,
+        backgroundAlpha: 0,
+        resizeTo: window,
+        autoDensity: true,
+        resolution: window.devicePixelRatio || 1,
+      });
+
+      const model = await PIXI.live2d.Live2DModel.from(
+        'live2d/yachiyo-kaguya/八千代辉夜姬.model3.json'
+      );
+      app.stage.addChild(model);
+
+      const origW = model.width;
+      const origH = model.height;
+      const charAspect = origW / origH;
 
       // 碰撞阈值：0 = 刚碰到就切，0.3 = 重叠30%人物宽度才切，1 = 完全遮住才切
       const OVERLAP_THRESHOLD = 0.4;
-
       // iframe居中偏移：正值向左移，负值向右移
       const OFFSET = 125;
 
-      function checkCollision() {
-        if (!charEl || !charEl.naturalWidth || !content) return;
-
+      function layout() {
         const vw = window.innerWidth;
         const vh = window.innerHeight;
-        const charAspect = charEl.naturalWidth / charEl.naturalHeight;
-        const charW = charAspect * vh * 0.95;
+
+        // 与原来 img 相同的规则：height = 95vh，left = -4%
+        const charH = vh * 0.95;
+        const scale = charH / origH;
+        model.scale.set(scale);
+        model.x = vw * (-0.04);
+        model.y = vh - charH;
+
+        const charW = charAspect * charH;
         const charRight = charW - vw * 0.04;
         const cardWidth = content.offsetWidth;
 
@@ -234,17 +253,17 @@
         const overlap = charRight - cardLeft;
         const collides = vw <= 768 || overlap > charW * OVERLAP_THRESHOLD;
 
-        document.body.classList.toggle("mobile-mode", collides);
+        document.body.classList.toggle('mobile-mode', collides);
         if (collides) document.body.style.paddingRight = '';
       }
 
-      if (charEl.complete && charEl.naturalWidth) {
-        checkCollision();
-      } else {
-        charEl.addEventListener("load", checkCollision);
-      }
+      // 眼睛跟随鼠标（canvas 本身 pointer-events: none，通过 document 监听）
+      document.addEventListener('pointermove', (e) => {
+        model.focus(e.clientX, e.clientY);
+      });
 
-      window.addEventListener("resize", checkCollision);
+      layout();
+      window.addEventListener('resize', layout);
     })();
   </script>
 </body>
