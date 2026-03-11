@@ -9,6 +9,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    window.__shouldUseMobileLayout = function () {
+      const vw = window.innerWidth;
+      const isTouchLike =
+        (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
+        (window.matchMedia && window.matchMedia('(hover: none)').matches) ||
+        ('ontouchstart' in window) ||
+        (navigator.maxTouchPoints && navigator.maxTouchPoints > 0);
+      return vw <= 768 || isTouchLike;
+    };
+
+    if (window.__shouldUseMobileLayout()) {
+      document.documentElement.classList.add('mobile-mode');
+    }
+  </script>
   <style>
     * {
       box-sizing: border-box;
@@ -109,7 +124,8 @@
       background: transparent;
     }
 
-    .mobile-mode {
+    html.mobile-mode body,
+    body.mobile-mode {
       justify-content: center;
       align-items: center;
       padding-right: 0;
@@ -120,6 +136,8 @@
       height: 70vh;
       min-height: 0;
       min-width: 0;
+      transform: none;
+      animation: fadeIn 0.45s ease-in-out forwards;
     }
 
     .logo {
@@ -203,8 +221,25 @@
   <script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/cubism4.min.js"></script>
   <script>
     (async function () {
+      const root = document.documentElement;
       const canvas = document.getElementById('character-canvas');
       const content = document.querySelector('.content');
+      const loadingOverlay = document.getElementById('loading-overlay');
+
+      const shouldUseMobileLayout = window.__shouldUseMobileLayout;
+      const setMobileMode = (enabled) => {
+        root.classList.toggle('mobile-mode', enabled);
+      };
+
+      // 关键：不要等 Live2D 资源加载完才决定布局，否则移动端会先闪现桌面布局
+      if (shouldUseMobileLayout()) {
+        setMobileMode(true);
+        document.body.style.paddingRight = '';
+
+        // 移动端不加载 Live2D（省流量/更快首屏）
+        if (loadingOverlay) loadingOverlay.classList.add('hidden');
+        return;
+      }
 
       const app = new PIXI.Application({
         view: canvas,
@@ -215,9 +250,18 @@
       });
 
       const R2_BASE = 'https://cdn.qkv.io';
+      /*
+       * 备选：使用 jsDelivr（基于 GitHub tag），当 R2 不方便时可切换。
+       * 注意：jsDelivr 的缓存/索引可能有延迟，且你之前遇到过资源不同步/404 的情况。
+       */
+      const CDN = 'https://cdn.jsdelivr.net/gh/HiderX/Tsukuyomi@latest';
       const model = await PIXI.live2d.Live2DModel.from(
-        `${R2_BASE}/live2d/yachiyo-kaguya/八千代辉夜姬.model3.json`
+        `${CDN}/live2d/yachiyo-kaguya/八千代辉夜姬.model3.json`
       );
+      
+      // const model = await PIXI.live2d.Live2DModel.from(
+      //   `${R2_BASE}/live2d/yachiyo-kaguya/八千代辉夜姬.model3.json`
+      // );
       app.stage.addChild(model);
 
       const origW = model.width;
@@ -231,8 +275,15 @@
         const vw = window.innerWidth;
         const vh = window.innerHeight;
 
+        // 移动端（触屏设备/小屏）直接使用移动端布局，避免 iframe 尺寸未稳定导致闪切
+        if (shouldUseMobileLayout()) {
+          setMobileMode(true);
+          document.body.style.paddingRight = '';
+          return;
+        }
+
         // 先清除 mobile-mode，确保用非移动端的卡片宽度来计算
-        document.body.classList.remove('mobile-mode');
+        setMobileMode(false);
         document.body.style.paddingRight = '';
 
         const charH = vh * 0.95;
@@ -250,13 +301,15 @@
 
         // margin=0 后继续缩窄，人物和卡片开始重叠
         const overlap = Math.max(0, charW + cardWidth - vw);
-        const cardTooNarrow = cardWidth / content.offsetHeight < 5 / 9;
-        const collides = vw <= 768 || cardTooNarrow;
+        const cardH = content.offsetHeight || content.getBoundingClientRect().height || 1;
+        const cardTooNarrow = cardWidth / cardH < 5 / 9;
+        const collides = cardTooNarrow;
 
 
         if (collides) {
-          document.body.classList.add('mobile-mode');
+          setMobileMode(true);
         } else {
+          setMobileMode(false);
           document.body.style.paddingRight = margin + 'px';
         }
 
