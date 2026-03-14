@@ -258,8 +258,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
       const toggleBtn = document.getElementById('chat-toggle');
       const unfoldBtn = document.getElementById('chat-unfold');
+      const largeWindowBtn = document.getElementById('chat-large-window');
       if (toggleBtn) toggleBtn.addEventListener('click', () => wrap.classList.add('chat-wrap--hidden'));
       if (unfoldBtn) unfoldBtn.addEventListener('click', () => wrap.classList.remove('chat-wrap--hidden'));
+      if (largeWindowBtn) {
+        largeWindowBtn.addEventListener('click', () => wrap.classList.toggle('chat-wrap--expanded'));
+      }
 
       let DEBUG_ACTION = false;
       try {
@@ -278,6 +282,15 @@ window.addEventListener('DOMContentLoaded', () => {
       const AVATAR_USER = IMG_CDN + '/img/character_1thumb.png';
       const AVATAR_ASSISTANT = IMG_CDN + '/img/character_2thumb.png';
 
+      function escapeHtml(text) {
+        if (typeof text !== 'string') return '';
+        return text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
       function appendMessage(role, text) {
         const msg = document.createElement('div');
         msg.className = 'chat-msg ' + role;
@@ -291,7 +304,7 @@ window.addEventListener('DOMContentLoaded', () => {
         avatarWrap.appendChild(avatar);
         const bubble = document.createElement('div');
         bubble.className = 'chat-msg-bubble';
-        bubble.textContent = text;
+        bubble.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
         msg.appendChild(avatarWrap);
         msg.appendChild(bubble);
         messagesEl.appendChild(msg);
