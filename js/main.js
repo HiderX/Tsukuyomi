@@ -171,9 +171,17 @@ window.addEventListener('DOMContentLoaded', () => {
               body.style.paddingRight = `${margin}px`;
             }
 
-            const cardBottom = content.getBoundingClientRect().bottom;
             model.x = margin;
-            model.y = cardBottom - charH + 160;
+            model.y = 0;
+            const cardRect = content.getBoundingClientRect();
+            const canvasRect = canvas.getBoundingClientRect();
+            const cardBottomInStage = cardRect.bottom - canvasRect.top;
+
+            const b = model.getBounds(false);
+            const modelBottom = b.y + b.height;
+            // 按模型高度比例下移，随窗口变化仍对齐（getBounds 常不包含脚底）
+            const bottomOffsetRatio = 0.155;
+            model.y = cardBottomInStage - modelBottom + b.height * bottomOffsetRatio;
           }
 
           let introPlaying = false;

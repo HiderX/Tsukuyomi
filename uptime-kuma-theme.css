@@ -15,98 +15,108 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  font-family: '1666963922', sans-serif;
+ font-family: '1666963922', BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
 }
 
-#app {
-  font-family: '1666963922', BlinkMacSystemFont, 'segoe ui', Roboto,
-    'helvetica neue', Arial, 'noto sans', sans-serif, 'apple color emoji',
-    'segoe ui emoji', 'segoe ui symbol', 'noto color emoji' !important;
+a {
+  text-decoration: none;
 }
+
+
 
 /* ==============================
-   背景透明 —— 关键部分
-   适用于 iframe 嵌入场景，让父页面背景透出来
-   如果不需要完全透明，把 transparent 改成 rgba(255,255,255,0.x)
-============================== */
+   背景透明
+==============================*/
+html,
 body,
-body.light {
-  background: transparent !important;
-}
-
-body.dark {
-  background: transparent !important;
-}
-
-/* Uptime Kuma 内部容器也需要去掉背景色，否则会挡住 */
+body.light,
+body.dark,
+#app,
+#app > div,
+.main,
 .container,
 .content,
 .status-page,
-#app > div {
+.shadow-box,
+.bg-maintenance,
+.bg-danger,
+.bg-up{
   background: transparent !important;
-}
+} 
+/* bg-primary不要 */
 
-/* 导航栏（如需保留导航栏背景可删除这段） */
+/* 导航栏透明 */
 header,
 nav,
 .navbar {
   background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* ==============================
-   导航栏交互
+   全局文字颜色微调
 ============================== */
-.navbar a:hover {
-  text-decoration: underline;
+
+.dark body,
+.dark .status-page,
+body.dark {
+  color: #e8ecf3 !important;
 }
 
 /* ==============================
-   卡片 / shadow-box / 侧边栏
-   提取公共样式，减少重复
+   卡片 / 面板
 ============================== */
 .card,
 .shadow-box,
 .sidebar {
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 16px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .card {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.72) !important;
   margin-bottom: 20px;
   padding: 20px;
-}
-
-.card-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .shadow-box {
-  background-color: rgba(255, 255, 255, 0.75);
-  padding: 10px;
-  margin: 5px;
-  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.68) !important;
+  padding: 14px !important;
+  margin: 8px 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.32) !important;
 }
 
-.dark .shadow-box:not(.alert) {
-  background-color: rgba(0, 0, 0, 0.65);
-  padding: 20px;
-  margin: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.dark .card,
+.dark .shadow-box,
+body.dark .card,
+body.dark .shadow-box {
+  background-color: rgba(15, 23, 42, 0.55) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.24) !important;
 }
 
 .sidebar {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.72) !important;
   padding: 20px;
   margin: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.dark .sidebar,
+body.dark .sidebar {
+  background-color: rgba(15, 23, 42, 0.55) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
 /* ==============================
-   渐变彩色文字动画
+   标题 / 彩色文字动画
 ============================== */
 span[data-v-7d4a7f28],
 .item-name,
@@ -115,35 +125,176 @@ div[data-v-7d4a7f28][data-v-b8247e57].alert-heading.p-2,
 .refresh-info > div,
 .alert-heading.p-2 > div,
 .alert-heading.p-2 > p,
-.alert-heading.p-2 > h1 {
-  background-image: linear-gradient(90deg, #07c160, #fb6bea 25%, #3aedff 50%, #fb6bea 75%, #28d079);
-  font-family: '1666963922', sans-serif;
+.alert-heading.p-2 > h1,
+h1,
+h2,
+h3,
+.group-title,
+.monitor-name {
+  background-image: linear-gradient(
+    90deg,
+    #07c160,
+    #fb6bea 25%,
+    #3aedff 50%,
+    #fb6bea 75%,
+    #28d079
+  );
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
+  background-clip: text;
   background-size: 400% 100%;
   animation: wzw 10s linear infinite;
 }
 
 @keyframes wzw {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* ==============================
-   iframe 适配缩放
+   状态总览大框
+============================== */
+div[role="alert"],
+.overall-status,
+.alert {
+  border-radius: 18px !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+}
+
+.dark div[role="alert"],
+.dark .overall-status,
+.dark .alert,
+body.dark div[role="alert"],
+body.dark .overall-status,
+body.dark .alert {
+  background: rgba(15, 23, 42, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ==============================
+   监控项列表
+============================== */
+.monitor-list .item {
+  border-radius: 14px !important;
+  padding: 12px 14px !important;
+  transition: all 0.2s ease !important;
+  background: rgba(255, 255, 255, 0.28) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  margin-bottom: 10px !important;
+}
+
+.dark .monitor-list .item,
+body.dark .monitor-list .item {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.monitor-list .item:hover {
+  background: rgba(255, 255, 255, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.32) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
+  transform: translateY(-1px);
+}
+
+.dark .monitor-list .item:hover,
+body.dark .monitor-list .item:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 监控名称 */
+.monitor-list .item .item-name,
+.monitor-list .item .monitor-name {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+.monitor-list .info{
+  display:flex;
+  align-items:center;
+}
+
+/* ==============================
+   百分比徽章 / 状态小标签
+============================== */
+.badge,
+.rounded-pill {
+  border-radius: 999px !important;
+  padding: 0.35rem 0.8rem !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ==============================
+   心跳条 / 历史条
+============================== */
+.uptime-chart,
+.extra-info,
+.wrap {
+  border-radius: 10px !important;
+}
+
+.uptime-chart .bar {
+  border-radius: 6px !important;
+}
+
+/* ==============================
+   链接样式
+============================== */
+a:hover,
+.monitor-list .item a:hover {
+  text-decoration: none !important;
+  opacity: 0.92;
+}
+
+/* 可点击监控名更明显 */
+.monitor-list .item a {
+  transition: opacity 0.2s ease;
+}
+
+/* ==============================
+   输入框 / 表单
+============================== */
+input,
+textarea,
+select {
+  border-radius: 12px !important;
+}
+
+/* ==============================
+   iframe 适配
+   去掉强制 scale，避免桌面端错位
 ============================== */
 .app {
-  width: 1000px;
-  height: 600px;
+  width: 100% !important;
+  height: auto !important;
   margin: 0 auto;
-  transform-origin: top left;
-  transform: scale(calc(100vw / 1000));
-  height: calc(600 * (100vw / 1000) * 1px);
+  transform: none !important;
 }
 
+/* 如果你确实是 iframe 小窗嵌入，再打开这段
+@media (max-width: 1000px) {
+  .app {
+    width: 1000px !important;
+    transform-origin: top left;
+    transform: scale(calc(100vw / 1000));
+    height: calc(600px * (100vw / 1000));
+  }
+}
+*/
+
 /* ==============================
-   元素隐藏
+   隐藏不需要元素
 ============================== */
 h2.group-title[data-v-f71ca08e] {
   display: none !important;
@@ -158,23 +309,26 @@ footer {
 }
 
 /* ==============================
-   间距调整（按需取消注释）
-==============================
-.p-4 {
-  padding: 0 !important;
+   可选：让描述条不那么空
+============================== */
+.description {
+  opacity: 0.9;
 }
 
-.mb-4 {
-  margin-bottom: 0 !important;
+/* ==============================
+   滚动条美化
+============================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.mt-4 {
-  margin-top: 0.5rem !important;
+::-webkit-scrollbar-thumb {
+  background: rgba(160, 160, 180, 0.45);
+  border-radius: 999px;
 }
-*/
 
-.monitor-list .item:hover {
-  background: inherit !important;
-  border: inherit !important;
-  box-shadow: inherit !important;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
+
