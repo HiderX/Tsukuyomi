@@ -20,6 +20,36 @@ python server.py
 
 启动后打开 **http://localhost:5000**（或 .env 中的 PORT）即可。
 
+## Linux 常驻运行（systemd）
+
+项目根目录提供 `tsukuyomi.service`，可在 Linux 上以 systemd 服务方式后台常驻、崩溃自动重启。
+
+**1. 修改服务文件中的路径与用户**
+
+编辑 `tsukuyomi.service`：
+
+- **`WorkingDirectory`**：必须改成你实际的项目目录（例如 `/var/www/qkv` 或 `/home/ubuntu/Tsukuyomi`）。程序会从该目录读 `.env`、`server.py` 和 `static/`，未修改或路径错误会报 `Failed to load environment files` / `No such file or directory`。
+- **`User`、`Group`**：改为运行服务的用户与组（如 `ubuntu` 或 `www-data`）；RHEL/CentOS 等若无 `nogroup`，可改为 `Group=nobody`。
+- 若系统里 Python 不是默认的 `python3`，可把 `ExecStart` 改为对应路径（如 `/usr/bin/python3.10`）。
+
+**2. 安装并启用**
+
+```bash
+sudo cp /path/to/Tsukuyomi/tsukuyomi.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable tsukuyomi   # 开机自启
+sudo systemctl start tsukuyomi
+```
+
+**3. 常用命令**
+
+```bash
+sudo systemctl status tsukuyomi   # 查看状态
+sudo systemctl stop tsukuyomi     # 停止
+sudo systemctl restart tsukuyomi  # 重启
+journalctl -u tsukuyomi -f        # 实时查看日志
+```
+
 ## 目录与路径
 
 - **项目根**：`server.py`、`.env`、`requirements.txt`、`static/`

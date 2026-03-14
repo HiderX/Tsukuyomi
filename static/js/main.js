@@ -217,7 +217,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
           layout();
           window.addEventListener('resize', layout);
-
+x
           async function playIntro() {
             if (introPlaying) return;
             introPlaying = true;
@@ -324,12 +324,11 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
       const IDLE_RESTORE_DELAY_MS = 3500;
+      const SMILE_DURATION_MS = 2000;
+      const OTHER_ACTION_DURATION_MS = 2800;
 
-      function runAction(action) {
+      function runAction(actionOrList) {
         const model = window.__live2dModel;
-        if (DEBUG_ACTION) {
-          console.log('[Live2D runAction] 请求动作:', action, '| model 存在:', !!model, '| motion:', typeof model?.motion, '| expression:', typeof model?.expression);
-        }
         if (!model) {
           if (DEBUG_ACTION) console.warn('[Live2D runAction] 无 model，跳过');
           return;
@@ -346,54 +345,80 @@ window.addEventListener('DOMContentLoaded', () => {
             if (DEBUG_ACTION) console.error('[Live2D runIdle] 异常:', e);
           }
         };
-        try {
-          const a = (action || 'idle').toLowerCase().trim();
-          if (a === 'greet' && typeof model.motion === 'function') {
-            if (DEBUG_ACTION) console.log('[Live2D runAction] 执行 greet → motion(Greet)');
-            model.motion('Greet', 0, 2);
-            window.setTimeout(runIdle, IDLE_RESTORE_DELAY_MS);
-            if (DEBUG_ACTION) console.log('[Live2D runAction] 已安排 runIdle，', IDLE_RESTORE_DELAY_MS, 'ms 后');
-            return;
+        const list = Array.isArray(actionOrList) ? actionOrList : [actionOrList].filter(Boolean);
+        if (list.length === 0) {
+          runIdle();
+          return;
+        }
+        if (list.length > 1 && list[0] !== 'idle') {
+          console.log('[Live2D runAction] 顺序执行:', list.map((x) => (x || 'idle').toLowerCase()).join(' → '));
+        }
+        function runSingleAction(action, onDone) {
+          const a = ((action || 'idle').toLowerCase().trim() === 'nod' ? 'greet' : (action || 'idle').toLowerCase().trim());
+          if (a !== 'idle') {
+            console.log('[Live2D runAction] 执行动作:', a, '| model:', !!model);
           }
-          if (a === 'smile' && typeof model.expression === 'function') {
-            if (DEBUG_ACTION) console.log('[Live2D runAction] 执行 smile → expression(smile)');
-            model.expression('smile');
-            window.setTimeout(runIdle, IDLE_RESTORE_DELAY_MS);
-            if (DEBUG_ACTION) console.log('[Live2D runAction] 已安排 runIdle，', IDLE_RESTORE_DELAY_MS, 'ms 后');
-            return;
+          if (DEBUG_ACTION) {
+            console.log('[Live2D runAction] 请求动作:', action, '| 归一:', a);
           }
-          if (a === 'sad' && typeof model.motion === 'function') {
-            if (DEBUG_ACTION) console.log('[Live2D runAction] 执行 sad → motion(ReactError)');
-            model.motion('ReactError', 0, 2);
-            window.setTimeout(runIdle, IDLE_RESTORE_DELAY_MS);
-            if (DEBUG_ACTION) console.log('[Live2D runAction] 已安排 runIdle，', IDLE_RESTORE_DELAY_MS, 'ms 后');
-            return;
-          }
-          if (a === 'shy' && typeof model.expression === 'function') {
-            if (DEBUG_ACTION) console.log('[Live2D runAction] 执行 shy → expression(narrow_eyes)');
-            model.expression('narrow_eyes');
-            window.setTimeout(runIdle, IDLE_RESTORE_DELAY_MS);
-            if (DEBUG_ACTION) console.log('[Live2D runAction] 已安排 runIdle，', IDLE_RESTORE_DELAY_MS, 'ms 后');
-            return;
-          }
-          if ((a === 'cry' || a === 'tearful' || a === 'tears') && typeof model.expression === 'function') {
-            if (DEBUG_ACTION) console.log('[Live2D runAction] 执行 cry/tearful → expression(tears)');
-            try {
-              model.expression('tears');
-              if (DEBUG_ACTION) console.log('[Live2D runAction] expression(tears) 已调用');
-            } catch (e) {
-              if (DEBUG_ACTION) console.error('[Live2D runAction] expression(tears) 失败:', e);
+          let durationMs = OTHER_ACTION_DURATION_MS;
+          try {
+            if (a === 'greet' && typeof model.motion === 'function') {
+              if (DEBUG_ACTION) console.log('[Live2D runAction] 执行 greet → motion(Greet)');
+              model.motion('Greet', 0, 2);
+              durationMs = OTHER_ACTION_DURATION_MS;
+            } else if (a === 'smile') {
+              if (DEBUG_ACTION) console.log('[Live2D runAction] 执行 smile');
+              try {
+                if (typeof model.expression === 'function') model.expression('smile');
+                const em = model.internalModel?.motionManager?.expressionManager ?? model.internalModel?.expressionManager;
+                if (em && typeof em.setExpressionWeight === 'function') em.setExpressionWeight('smile', 1);
+              } catch (e) {
+                if (DEBUG_ACTION) console.warn('[Live2D runAction] smile 异常:', e);
+              }
+              durationMs = SMILE_DURATION_MS;
+            } else if (a === 'sad' && typeof model.motion === 'function') {
+              if (DEBUG_ACTION) console.log('[Live2D runAction] 执行 sad → motion(ReactError)');
+              model.motion('ReactError', 0, 2);
+              durationMs = OTHER_ACTION_DURATION_MS;
+            } else if (a === 'shy' && typeof model.expression === 'function') {
+              if (DEBUG_ACTION) console.log('[Live2D runAction] 执行 shy → expression(narrow_eyes)');
+              model.expression('narrow_eyes');
+              durationMs = OTHER_ACTION_DURATION_MS;
+            } else if (a === 'cry' || a === 'tearful' || a === 'tears') {
+              if (DEBUG_ACTION) console.log('[Live2D runAction] 执行 cry/tearful → motion(Cry)');
+              try {
+                if (typeof model.motion === 'function') {
+                  model.motion('Cry', 0, 2);
+                  if (DEBUG_ACTION) console.log('[Live2D runAction] motion(Cry) 已调用');
+                }
+              } catch (e) {
+                if (DEBUG_ACTION) console.error('[Live2D runAction] motion(Cry) 失败:', e);
+              }
+              durationMs = 3600;
+            } else if (a !== 'idle' && typeof model.motion === 'function') {
+              if (DEBUG_ACTION) console.log('[Live2D runAction] 其他 → motion(Idle, 0, 2)');
+              model.motion('Idle', 0, 2);
+              durationMs = 0;
             }
-            window.setTimeout(runIdle, IDLE_RESTORE_DELAY_MS);
-            if (DEBUG_ACTION) console.log('[Live2D runAction] 已安排 runIdle，', IDLE_RESTORE_DELAY_MS, 'ms 后');
+          } catch (e) {
+            if (DEBUG_ACTION) console.error('[Live2D runAction] 异常:', e);
+          }
+          if (typeof onDone === 'function') {
+            window.setTimeout(onDone, durationMs);
+          }
+        }
+        function runSequence(actions, index) {
+          if (index >= actions.length) {
+            runIdle();
             return;
           }
-          if (typeof model.motion === 'function') {
-            if (DEBUG_ACTION) console.log('[Live2D runAction] 其他/idle → motion(Idle, 0, 2)');
-            model.motion('Idle', 0, 2);
-          }
-        } catch (e) {
-          if (DEBUG_ACTION) console.error('[Live2D runAction] 异常:', e);
+          runSingleAction(actions[index], () => runSequence(actions, index + 1));
+        }
+        if (list.length === 1) {
+          runSingleAction(list[0], runIdle);
+        } else {
+          runSequence(list, 0);
         }
       }
 

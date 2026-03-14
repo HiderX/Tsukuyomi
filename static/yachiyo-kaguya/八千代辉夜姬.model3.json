@@ -55,6 +55,13 @@
 					"FadeInTime": 0.3,
 					"FadeOutTime": 0.3
 				}
+			],
+			"Cry": [
+				{
+					"File": "motions/yachiyo_cry.motion3.json",
+					"FadeInTime": 0.25,
+					"FadeOutTime": 0.35
+				}
 			]
 		}
 	},
