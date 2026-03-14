@@ -261,7 +261,7 @@ p {
   }
 }
 
-/* 对话窗口：固定右下角，不挡左侧人物，始终浮在最上层 */
+/* 对话窗口：固定右下角，不挡左侧人物。默认隐藏，桌面端在 revealSite 后由 JS 显示 */
 .chat-wrap {
   position: fixed;
   right: 16px;
@@ -271,28 +271,40 @@ p {
   width: 340px;
   max-height: 420px;
   pointer-events: none;
-  visibility: visible;
-  opacity: 1;
+  visibility: hidden;
+  opacity: 0;
 }
 
+/* LINE 風：折りたたみ時は緑の丸ボタン＋吹き出しアイコン（SVG） */
 .chat-unfold {
   display: none;
   pointer-events: auto;
   position: absolute;
   right: 0;
   bottom: 0;
-  padding: 10px 16px;
+  width: 52px;
+  height: 52px;
+  padding: 0;
   border: none;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-  color: #1a1a1a;
-  font-size: 0.9rem;
+  border-radius: 50%;
+  background: #06c755;
+  box-shadow: 0 2px 8px rgba(6, 199, 85, 0.4);
+  color: #fff;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-unfold .chat-unfold-icon {
+  width: 24px;
+  height: 24px;
+  margin: 0 auto;
+  display: block;
 }
 
 .chat-unfold:hover {
-  background: #fff;
+  background: #05b34a;
+  box-shadow: 0 3px 12px rgba(6, 199, 85, 0.5);
 }
 
 .chat-wrap--hidden .chat-unfold {
@@ -309,10 +321,10 @@ p {
   flex-direction: column;
   min-height: 180px;
   max-height: 420px;
-  background: rgba(255, 255, 255, 0.96);
+  background: #f7f7f7;
   border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   overflow: hidden;
   position: relative;
 }
@@ -344,15 +356,16 @@ p {
   min-height: 80px;
   max-height: 320px;
   overflow-y: auto;
-  padding: 44px 12px 12px 12px;
+  padding: 44px 10px 10px 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
+  background: #f7f7f7;
 }
 
 .chat-msg {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: flex-end;
   max-width: 100%;
 }
@@ -363,8 +376,8 @@ p {
 
 .chat-msg-avatar-wrap {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   overflow: hidden;
 }
@@ -376,67 +389,74 @@ p {
   transform: scale(var(--chat-avatar-scale));
 }
 
+/* LINE 风气泡：左侧灰白、右侧绿色，小尾巴 */
 .chat-msg-bubble {
-  max-width: 85%;
+  max-width: 78%;
   padding: 8px 12px;
-  border-radius: 12px;
+  border-radius: 18px;
   font-size: 0.9rem;
-  line-height: 1.45;
+  line-height: 1.5;
   word-break: break-word;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 .chat-msg.assistant .chat-msg-bubble {
-  background: rgba(0, 0, 0, 0.06);
+  background: #fff;
   color: #1a1a1a;
   border-bottom-left-radius: 4px;
+  margin-right: auto;
 }
 
 .chat-msg.user .chat-msg-bubble {
-  background: rgba(100, 120, 200, 0.18);
+  background: #b5e6b5;
   color: #1a1a1a;
   border-bottom-right-radius: 4px;
+  margin-left: auto;
 }
 
 .chat-input-row {
   display: flex;
   gap: 8px;
-  padding: 10px 12px 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 8px 10px 10px;
+  border-top: 1px solid #e0e0e0;
+  background: #fff;
 }
 
 .chat-input {
   flex: 1;
   min-width: 0;
-  padding: 9px 12px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 10px;
-  background: #fff;
+  padding: 10px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  background: #f0f0f0;
   color: #1a1a1a;
   font-size: 0.9rem;
   outline: none;
 }
 
 .chat-input::placeholder {
-  color: #888;
+  color: #999;
 }
 
 .chat-input:focus {
-  border-color: rgba(100, 120, 200, 0.5);
+  background: #fff;
+  border-color: #b5e6b5;
 }
 
 .chat-send {
-  padding: 9px 16px;
+  padding: 10px 18px;
   border: none;
-  border-radius: 10px;
-  background: rgba(100, 120, 200, 0.85);
-  color: #fff;
+  border-radius: 20px;
+  background: #b5e6b5;
+  color: #1a1a1a;
   font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
 }
 
 .chat-send:hover {
-  background: rgba(100, 120, 200, 1);
+  background: #9dd99d;
 }
 
 .chat-send:disabled {

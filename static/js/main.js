@@ -15,15 +15,6 @@ if (window.__shouldUseMobileLayout()) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  (function showChatDialogFirst() {
-    var wrap = document.getElementById('chat-wrap');
-    if (wrap) {
-      wrap.style.visibility = 'visible';
-      wrap.style.opacity = '1';
-      wrap.style.zIndex = '9999';
-    }
-  })();
-
   (async function () {
     const root = document.documentElement;
     const body = document.body;
@@ -217,7 +208,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
           layout();
           window.addEventListener('resize', layout);
-x
           async function playIntro() {
             if (introPlaying) return;
             introPlaying = true;
@@ -253,8 +243,9 @@ x
     ]);
     revealSite();
 
-    // 对话窗口：消息列表 + 根据回复内容驱动 Live2D 动作（system prompt 与动作解析在后端）
+    // 对话窗口：仅桌面端在 revealSite 之后加载并显示；移动端不请求、不初始化
     (async function initChat() {
+      if (shouldUseMobileLayout()) return;
       const wrap = document.getElementById('chat-wrap');
       const messagesEl = document.getElementById('chat-messages');
       const input = document.getElementById('chat-input');
@@ -520,24 +511,27 @@ x
         messagesEl.appendChild(placeholder);
         messagesEl.scrollTop = messagesEl.scrollHeight;
 
-        const data = await sendToAI(text);
-        sendBtn.disabled = false;
+        try {
+          const data = await sendToAI(text);
+          if (!data) return;
 
-        placeholder.remove();
-        if (!data) return;
-
-        let displayText = data?.choices?.[0]?.message?.content;
-        if (typeof displayText !== 'string') displayText = '';
-        let finalAction = data?.live2d_action;
-        if (finalAction == null) {
-          const parsed = parseActionAndText(displayText);
-          displayText = parsed.text;
-          finalAction = parsed.action || 'idle';
+          let displayText = data?.choices?.[0]?.message?.content;
+          if (typeof displayText !== 'string') displayText = '';
+          let finalAction = data?.live2d_action;
+          if (finalAction == null) {
+            const parsed = parseActionAndText(displayText);
+            displayText = parsed.text;
+            finalAction = parsed.action || 'idle';
+          }
+          if (DEBUG_ACTION) console.log('[Chat] 展示文案:', displayText.slice(0, 80), '| 动作(来自后端或解析):', finalAction);
+          appendMessage('assistant', displayText || '…');
+          chatHistory.push({ role: 'assistant', content: displayText });
+          runAction(finalAction);
+        } finally {
+          sendBtn.disabled = false;
+          input.value = '';
+          placeholder.remove();
         }
-        if (DEBUG_ACTION) console.log('[Chat] 展示文案:', displayText.slice(0, 80), '| 动作(来自后端或解析):', finalAction);
-        appendMessage('assistant', displayText || '…');
-        chatHistory.push({ role: 'assistant', content: displayText });
-        runAction(finalAction);
       });
 
       input.addEventListener('keydown', (e) => {
