@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>qkv.io</title>
   <link rel="icon" type="image/png"
-    href="https://cdn.jsdelivr.net/gh/HiderX/Tsukuyomi@latest/img/character_2thumb.png">
+    href="https://cdn.jsdelivr.net/gh/HiderX/Tsukuyomi@latest/static/img/character_2thumb.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -30,6 +30,18 @@
   <div class="content">
     <iframe src="https://status.qkv.io/status/default" class="uptime-iframe" title="System Status"
       loading="eager" allowtransparency="true"></iframe>
+  </div>
+
+  <div id="chat-wrap" class="chat-wrap">
+    <button type="button" id="chat-unfold" class="chat-unfold" aria-label="展开对话" title="展开对话">对话</button>
+    <div class="chat-panel">
+      <button type="button" id="chat-toggle" class="chat-toggle" aria-label="收起对话" title="收起">−</button>
+      <div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div>
+      <div class="chat-input-row">
+        <input id="chat-input" class="chat-input" type="text" placeholder="和月見ヤチヨ说句话…" maxlength="500" autocomplete="off" />
+        <button type="button" id="chat-send" class="chat-send" aria-label="发送">发送</button>
+      </div>
+    </div>
   </div>
 
   <script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
