@@ -291,6 +291,136 @@ window.addEventListener('DOMContentLoaded', () => {
           .replace(/"/g, '&quot;');
       }
 
+      let markedConfigured = false;
+      function configureMarked() {
+        if (markedConfigured || typeof window.marked === 'undefined') return;
+        if (typeof window.markedKatex === 'function') {
+          try {
+            window.marked.use(window.markedKatex({ throwOnError: false, nonStandard: true }));
+          } catch (_) {}
+        }
+        try {
+          window.marked.use({
+            gfm: true,
+            breaks: true,
+            highlight: function (code, lang) {
+              if (typeof window.hljs === 'undefined') return escapeHtml(code);
+              const langName = (lang || '').trim().toLowerCase();
+              try {
+                if (langName && window.hljs.getLanguage(langName)) {
+                  return window.hljs.highlight(code, { language: langName }).value;
+                }
+                return window.hljs.highlightAuto(code).value;
+              } catch (_) {
+                return escapeHtml(code);
+              }
+            },
+          });
+        } catch (_) {}
+        markedConfigured = true;
+      }
+
+      /** 括号匹配：从 start 找与开括号匹配的 )，跳过 \ 转义。返回匹配位置或 -1 */
+      function findMatchingCloseParen(str, start) {
+        let depth = 1;
+        let i = start;
+        while (i < str.length && depth > 0) {
+          if (str[i] === '\\' && str[i + 1] !== undefined) { i += 2; continue; }
+          if (str[i] === '(') { depth++; i++; continue; }
+          if (str[i] === ')') {
+            depth--;
+            if (depth === 0) return i;
+            i++;
+            continue;
+          }
+          i++;
+        }
+        return -1;
+      }
+
+      /** 大模型常输出 ( \displaystyle ... ) 或 ( \command ... )，转为 marked-katex-extension 能识别的 $$ ... $$ 与 $ ... $ */
+      function normalizeDisplayMath(text) {
+        if (typeof text !== 'string') return text;
+        let out = '';
+        let lastEnd = 0;
+        let i = 0;
+        while (i < text.length) {
+          const rest = text.slice(i);
+          const display = rest.match(/^\(\s*\\displaystyle\s*/);
+          const inline = rest.match(/^\(\s*\\([a-zA-Z]+)/);
+          if (display) {
+            const start = i;
+            const contentStart = i + display[0].length;
+            const end = findMatchingCloseParen(text, contentStart);
+            if (end >= 0) {
+              out += text.slice(lastEnd, start) + '$$' + text.slice(contentStart, end) + '$$';
+              lastEnd = end + 1;
+              i = end + 1;
+              continue;
+            }
+          }
+          if (inline && !rest.startsWith('(\\displaystyle')) {
+            const start = i;
+            const contentStart = i + inline[0].length;
+            const end = findMatchingCloseParen(text, contentStart);
+            if (end >= 0) {
+              out += text.slice(lastEnd, start) + '$' + text.slice(contentStart, end).trim() + '$';
+              lastEnd = end + 1;
+              i = end + 1;
+              continue;
+            }
+          }
+          i++;
+        }
+        return out + text.slice(lastEnd);
+      }
+
+      function renderMarkdownToHtml(md) {
+        if (typeof md !== 'string') return '';
+        configureMarked();
+        const normalized = normalizeDisplayMath(md);
+        if (typeof window.marked === 'undefined') return escapeHtml(normalized).replace(/\n/g, '<br>');
+        try {
+          const rawHtml = window.marked.parse(normalized);
+          if (typeof window.DOMPurify !== 'undefined') {
+            return window.DOMPurify.sanitize(rawHtml, {
+              ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'b', 'i', 'u', 'code', 'pre', 'ul', 'ol', 'li', 'a', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'div', 'hr', 'table', 'thead', 'tbody', 'tr', 'th', 'td'],
+              ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'style'],
+            });
+          }
+          return rawHtml;
+        } catch (_) {
+          return escapeHtml(md).replace(/\n/g, '<br>');
+        }
+      }
+
+      function enhanceCodeBlocks(container) {
+        if (!container || !container.querySelectorAll) return;
+        const pres = container.querySelectorAll('pre');
+        pres.forEach((pre) => {
+          if (pre.parentElement && pre.parentElement.classList.contains('chat-code-wrapper')) return;
+          const wrapper = document.createElement('div');
+          wrapper.className = 'chat-code-wrapper';
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'chat-copy-btn';
+          btn.textContent = '复制';
+          btn.onclick = async () => {
+            try {
+              await navigator.clipboard.writeText(pre.innerText || pre.textContent);
+              btn.textContent = '已复制';
+              setTimeout(() => { btn.textContent = '复制'; }, 1200);
+            } catch (_) {
+              btn.textContent = '失败';
+              setTimeout(() => { btn.textContent = '复制'; }, 1200);
+            }
+          };
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(btn);
+          wrapper.appendChild(pre);
+        });
+      }
+
       function appendMessage(role, text) {
         const msg = document.createElement('div');
         msg.className = 'chat-msg ' + role;
@@ -303,8 +433,9 @@ window.addEventListener('DOMContentLoaded', () => {
         avatar.alt = role === 'user' ? '168' : 'ヤチヨ';
         avatarWrap.appendChild(avatar);
         const bubble = document.createElement('div');
-        bubble.className = 'chat-msg-bubble';
-        bubble.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
+        bubble.className = 'chat-msg-bubble markdown-body';
+        bubble.innerHTML = renderMarkdownToHtml(text);
+        enhanceCodeBlocks(bubble);
         msg.appendChild(avatarWrap);
         msg.appendChild(bubble);
         messagesEl.appendChild(msg);
@@ -527,6 +658,10 @@ window.addEventListener('DOMContentLoaded', () => {
         try {
           const data = await sendToAI(text);
           if (!data) return;
+
+          if (DEBUG_ACTION) {
+            console.log('[Chat] 大模型返回 JSON:', JSON.stringify(data, null, 2));
+          }
 
           let displayText = data?.choices?.[0]?.message?.content;
           if (typeof displayText !== 'string') displayText = '';

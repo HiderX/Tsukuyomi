@@ -557,6 +557,140 @@ p {
   margin-left: auto;
 }
 
+/* Markdown 正文（参考 Demo .markdown-body） */
+.chat-msg-bubble.markdown-body {
+  line-height: 1.75;
+}
+
+.chat-msg-bubble .katex {
+  font-size: 1.05em;
+}
+
+.chat-msg-bubble .katex-display {
+  margin: 0.6em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.chat-msg-bubble.markdown-body h1,
+.chat-msg-bubble.markdown-body h2,
+.chat-msg-bubble.markdown-body h3 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+
+.chat-msg-bubble.markdown-body p {
+  margin: 0.6em 0;
+}
+
+.chat-msg-bubble.markdown-body p:first-child {
+  margin-top: 0;
+}
+
+.chat-msg-bubble.markdown-body p:last-child {
+  margin-bottom: 0;
+}
+
+.chat-msg-bubble.markdown-body pre {
+  background: #0f172a;
+  color: #e5e7eb;
+  padding: 12px 14px;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin: 0.8em 0;
+  font-size: 0.85em;
+  line-height: 1.45;
+}
+
+.chat-msg-bubble.markdown-body code {
+  font-family: Menlo, Monaco, Consolas, monospace;
+}
+
+.chat-msg-bubble.markdown-body :not(pre) > code {
+  background: rgba(0, 0, 0, 0.08);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+.chat-msg-bubble.markdown-body blockquote {
+  margin: 0.8em 0;
+  padding: 0.6em 1em;
+  border-left: 4px solid rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.04);
+  color: inherit;
+}
+
+.chat-msg-bubble.markdown-body ul,
+.chat-msg-bubble.markdown-body ol {
+  margin: 0.6em 0;
+  padding-left: 1.4em;
+}
+
+.chat-msg-bubble.markdown-body li {
+  margin: 0.2em 0;
+}
+
+.chat-msg-bubble.markdown-body table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.8em 0;
+  font-size: 0.9em;
+  display: block;
+  overflow-x: auto;
+}
+
+.chat-msg-bubble.markdown-body th,
+.chat-msg-bubble.markdown-body td {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.chat-msg-bubble.markdown-body th {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.chat-msg-bubble.markdown-body a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.chat-msg-bubble.markdown-body a:hover {
+  text-decoration: underline;
+}
+
+.chat-msg-bubble.markdown-body hr {
+  margin: 1em 0;
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* 代码块容器 + 复制按钮 */
+.chat-code-wrapper {
+  position: relative;
+  margin: 0.8em 0;
+}
+
+.chat-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: none;
+  background: #374151;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.chat-copy-btn:hover {
+  background: #4b5563;
+}
+
 .chat-input-row {
   display: flex;
   gap: 8px;

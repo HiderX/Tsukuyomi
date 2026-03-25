@@ -303,6 +303,8 @@ def create_app():
             r = requests.post(url, json=body, headers=headers, timeout=60)
             r.raise_for_status()
             resp_data = r.json()
+            if DEBUG:
+                print("[chat] 上游 AI 接口返回:", json.dumps(resp_data, ensure_ascii=False, indent=2))
             resp_data = _sanitize_chat_response(resp_data)
             choices = resp_data.get("choices")
             if choices and isinstance(choices, list):
