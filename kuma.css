@@ -200,6 +200,10 @@ body.dark .alert {
   box-shadow: none !important;
 }
 
+.monitor-list .item .row {
+  align-items: center;
+}
+
 .dark .monitor-list .item,
 body.dark .monitor-list .item {
   background: var(--claude-surface) !important;
@@ -238,6 +242,11 @@ body.dark .monitor-list .item:hover {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.monitor-list .item .extra-info,
+.extra-info[data-v-1c078f96] {
+  margin-bottom: 0 !important;
 }
 
 /* ==============================
@@ -558,9 +567,9 @@ select {
 /* ==============================
    隐藏不需要元素
 ============================== */
-h1.title-flex[data-v-007873bc]{
+/* h1.title-flex[data-v-007873bc]{
   display: none !important;
-}
+} */
 
 h2.group-title[data-v-f71ca08e] {
   display: none !important;
