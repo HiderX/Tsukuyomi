@@ -1,11 +1,19 @@
-/* ==============================
-   自定义字体
-============================== */
-@font-face {
-  font-family: '1666963922';
-  src: url('https://jsd.cdn.zzko.cn/gh/54ayao/ACG@main/static/fonts/1666963922.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap");
+
+:root {
+  --claude-page-bg: #fbf7ef;
+  --claude-surface: #fbf7ef;
+  --claude-surface-hover: #fbf7ef;
+  --claude-surface-active: #fbf7ef;
+  --claude-border: rgba(116, 96, 73, 0.12);
+  --claude-border-hover: rgba(116, 96, 73, 0.12);
+  --claude-shadow-sm: none;
+  --claude-shadow-md: none;
+  --claude-accent: #d97757;
+  --claude-accent-hover: #c8694d;
+  --claude-accent-soft: #f4dfd3;
+  --claude-accent-text: #a2553b;
+  --claude-accent-ring: rgba(217, 119, 87, 0.22);
 }
 
 /* ==============================
@@ -15,10 +23,20 @@ html,
 body {
   margin: 0;
   padding: 0;
- font-family: '1666963922', BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  font-family: "Manrope", BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  line-height: 1.55;
   overflow-x: hidden !important;
   overflow-y: auto !important;
+}
+
+h1,
+h2,
+h3,
+.group-title {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 a {
@@ -44,7 +62,7 @@ body.dark,
 .bg-maintenance,
 .bg-danger,
 .bg-up{
-  background: transparent !important;
+  background: var(--claude-page-bg) !important;
 } 
 /* bg-primary不要 */
 
@@ -52,8 +70,8 @@ body.dark,
 header,
 nav,
 .navbar {
-  background: transparent !important;
-  border: none !important;
+  background: var(--claude-surface) !important;
+  border: 1px solid transparent !important;
   box-shadow: none !important;
 }
 
@@ -64,7 +82,7 @@ nav,
 .dark body,
 .dark .status-page,
 body.dark {
-  color: #e8ecf3 !important;
+  color: #2f2419 !important;
 }
 
 /* ==============================
@@ -74,49 +92,49 @@ body.dark {
 .shadow-box,
 .sidebar {
   border-radius: 16px !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  box-shadow: none !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .card {
-  background-color: rgba(255, 255, 255, 0.72) !important;
+  background-color: var(--claude-surface) !important;
   margin-bottom: 20px;
   padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid var(--claude-border) !important;
 }
 
 .shadow-box {
-  background-color: rgba(255, 255, 255, 0.68) !important;
+  background-color: var(--claude-surface) !important;
   padding: 14px !important;
   margin: 8px 0 !important;
-  border: 1px solid rgba(255, 255, 255, 0.32) !important;
+  border: 1px solid var(--claude-border) !important;
 }
 
 .dark .card,
 .dark .shadow-box,
 body.dark .card,
 body.dark .shadow-box {
-  background-color: rgba(15, 23, 42, 0.55) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.24) !important;
+  background-color: var(--claude-surface) !important;
+  border: 1px solid var(--claude-border) !important;
+  box-shadow: none !important;
 }
 
 .sidebar {
-  background-color: rgba(255, 255, 255, 0.72) !important;
+  background-color: var(--claude-surface) !important;
   padding: 20px;
   margin: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid var(--claude-border) !important;
 }
 
 .dark .sidebar,
 body.dark .sidebar {
-  background-color: rgba(15, 23, 42, 0.55) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background-color: var(--claude-surface) !important;
+  border: 1px solid var(--claude-border) !important;
 }
 
 /* ==============================
-   标题 / 彩色文字动画
+   标题 / 文字层级
 ============================== */
 span[data-v-7d4a7f28],
 .item-name,
@@ -131,31 +149,20 @@ h2,
 h3,
 .group-title,
 .monitor-name {
-  background-image: linear-gradient(
-    90deg,
-    #07c160,
-    #fb6bea 25%,
-    #3aedff 50%,
-    #fb6bea 75%,
-    #28d079
-  );
-  -webkit-text-fill-color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  background-size: 400% 100%;
-  animation: wzw 10s linear infinite;
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  letter-spacing: -0.02em;
 }
 
-@keyframes wzw {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+.description,
+.refresh-info,
+.monitor-list .info,
+.text-muted,
+small {
+  font-family: "Manrope", BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-size: 0.93rem;
+  line-height: 1.6;
 }
 
 /* ==============================
@@ -165,9 +172,9 @@ div[role="alert"],
 .overall-status,
 .alert {
   border-radius: 18px !important;
-  border: 1px solid rgba(255, 255, 255, 0.28) !important;
-  background: rgba(255, 255, 255, 0.6) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid var(--claude-border) !important;
+  background: var(--claude-surface) !important;
+  box-shadow: none !important;
 }
 
 .dark div[role="alert"],
@@ -176,52 +183,61 @@ div[role="alert"],
 body.dark div[role="alert"],
 body.dark .overall-status,
 body.dark .alert {
-  background: rgba(15, 23, 42, 0.5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: var(--claude-surface) !important;
+  border: 1px solid var(--claude-border) !important;
 }
 
 /* ==============================
    监控项列表
 ============================== */
 .monitor-list .item {
-  border-radius: 14px !important;
-  padding: 12px 14px !important;
-  transition: all 0.2s ease !important;
-  background: rgba(255, 255, 255, 0.28) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 16px !important;
+  padding: 13px 16px !important;
+  transition: none !important;
+  background: var(--claude-surface) !important;
+  border: 1px solid var(--claude-border) !important;
   margin-bottom: 10px !important;
+  box-shadow: none !important;
 }
 
 .dark .monitor-list .item,
 body.dark .monitor-list .item {
-  background: rgba(255, 255, 255, 0.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  background: var(--claude-surface) !important;
+  border: 1px solid var(--claude-border) !important;
 }
 
 .monitor-list .item:hover {
-  background: rgba(255, 255, 255, 0.4) !important;
-  border: 1px solid rgba(255, 255, 255, 0.32) !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
-  transform: translateY(-1px);
+  background: var(--claude-surface) !important;
+  border: 1px solid var(--claude-border) !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 .dark .monitor-list .item:hover,
 body.dark .monitor-list .item:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2) !important;
+  background: var(--claude-surface) !important;
+  border: 1px solid var(--claude-border) !important;
+  box-shadow: none !important;
 }
 
 /* 监控名称 */
 .monitor-list .item .item-name,
 .monitor-list .item .monitor-name {
-  font-size: 18px !important;
-  font-weight: 700 !important;
+  font-family: "Manrope", BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 .monitor-list .info{
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 /* ==============================
@@ -230,9 +246,64 @@ body.dark .monitor-list .item:hover {
 .badge,
 .rounded-pill {
   border-radius: 999px !important;
-  padding: 0.35rem 0.8rem !important;
+  padding: 0 0.7rem !important;
+  font-family: "Manrope", BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 7.25ch;
+  min-height: 30px;
+  text-align: center;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  box-shadow: none !important;
+}
+
+/* 监控列表可用率：固定宽度的纯文本数字，更接近 Claude 的信息标注 */
+.monitor-list .info > .badge.rounded-pill,
+.shadow-box.monitor-list .info > .badge.rounded-pill,
+.badge.rounded-pill[data-v-1c078f96] {
+  box-sizing: border-box;
+  position: relative;
+  width: 88px !important;
+  min-width: 88px !important;
+  max-width: 88px !important;
+  min-height: auto !important;
+  height: auto !important;
+  padding: 0 14px 0 0 !important;
+  flex: 0 0 88px !important;
+  justify-content: center !important;
+  text-align: center !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #241a12 !important;
+  font-size: 0.8rem !important;
   font-weight: 700 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  letter-spacing: -0.012em !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.monitor-list .info > .badge.rounded-pill::after,
+.shadow-box.monitor-list .info > .badge.rounded-pill::after,
+.badge.rounded-pill[data-v-1c078f96]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 1px;
+  height: 16px;
+  transform: translateY(-50%);
+  background: rgba(116, 96, 73, 0.18);
 }
 
 /* ==============================
@@ -254,12 +325,192 @@ body.dark .monitor-list .item:hover {
 a:hover,
 .monitor-list .item a:hover {
   text-decoration: none !important;
-  opacity: 0.92;
+  opacity: 1 !important;
+}
+
+/* ==============================
+   Claude 风格按钮 / 可用性颜色覆写
+============================== */
+.btn,
+.badge,
+.rounded-pill {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+.btn-primary,
+.btn-success,
+.bg-success,
+.text-bg-success,
+.bg-up,
+.alert-success,
+.badge.bg-success,
+.badge.bg-primary,
+.rounded-pill.bg-success,
+.rounded-pill.bg-primary,
+.badge.text-bg-success,
+.badge.text-bg-primary,
+.rounded-pill.text-bg-success,
+.rounded-pill.text-bg-primary {
+  background-color: var(--claude-surface) !important;
+  border-color: var(--claude-border) !important;
+  color: #2f2419 !important;
+}
+
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus,
+.btn-primary.active,
+.btn-success:hover,
+.btn-success:active,
+.btn-success:focus,
+.btn-success.active {
+  background-color: var(--claude-surface) !important;
+  border-color: var(--claude-border) !important;
+  color: #2f2419 !important;
+  box-shadow: none !important;
+}
+
+.btn-check:focus + .btn-primary,
+.btn-primary:focus,
+.btn-check:focus + .btn-success,
+.btn-success:focus,
+.btn-check:focus + .btn-outline-primary,
+.btn-outline-primary:focus {
+  box-shadow: none !important;
+}
+
+.btn-outline-primary {
+  color: #2f2419 !important;
+  border-color: var(--claude-border) !important;
+  background-color: var(--claude-surface) !important;
+}
+
+.btn-outline-primary:hover,
+.btn-check:checked + .btn-outline-primary,
+.btn-check:active + .btn-outline-primary,
+.btn-outline-primary:active,
+.btn-outline-primary.active,
+.btn-outline-primary.dropdown-toggle.show,
+.btn-check:active + .btn-outline-primary[data-v-dead4ba4],
+.btn-check:checked + .btn-outline-primary[data-v-dead4ba4],
+.btn-check:hover + .btn-outline-primary[data-v-dead4ba4] {
+  color: #2f2419 !important;
+  background-color: var(--claude-surface) !important;
+  border-color: var(--claude-border) !important;
+  box-shadow: none !important;
+}
+
+.btn-outline-primary:disabled,
+.btn-outline-primary.disabled {
+  color: rgba(47, 36, 25, 0.55) !important;
+  border-color: var(--claude-border) !important;
+  background-color: var(--claude-surface) !important;
+}
+
+.btn-outline-normal.active,
+.active.filter-dropdown-status {
+  background-color: var(--claude-surface) !important;
+  border-color: var(--claude-border) !important;
+  color: #2f2419 !important;
+  box-shadow: none !important;
+}
+
+.overall-status .ok[data-v-007873bc],
+.overall-status .warning[data-v-007873bc],
+.overall-status .danger[data-v-007873bc],
+.link-active[data-v-1c078f96],
+.url[data-v-ce8053bd],
+.url a[data-v-ce8053bd],
+.go-back[data-v-3a2c81fb],
+.arrow-active[data-v-bea7f612],
+.status-maintenance[data-v-007873bc],
+.maintenance-bg-info[data-v-007873bc] {
+  color: #2f2419 !important;
+}
+
+.item.scheduled .circle[data-v-366547c7] {
+  background-color: #b79c84 !important;
+}
+
+.item.under-maintenance .circle[data-v-366547c7] {
+  background-color: #b79c84 !important;
+}
+
+.item.inactive .circle[data-v-366547c7] {
+  background-color: #d2b6ab !important;
+}
+
+.item.ended .circle[data-v-366547c7],
+.item.unknown .circle[data-v-366547c7] {
+  background-color: #c8bdb2 !important;
+}
+
+.item[data-v-1cc8717a],
+.item[data-v-366547c7],
+.incident-group .incident-list .incident-item[data-v-f13238a3],
+.tags-list .tags-list-row[data-v-859764ea],
+.tag-monitors-list .tag-monitors-list-row[data-v-93b67aa4],
+.sort-item[data-v-bea7f612],
+.btn-outline-normal,
+.filter-dropdown-status,
+.timeslot {
+  background-color: var(--claude-surface) !important;
+  border-color: var(--claude-border) !important;
+}
+
+.item[data-v-1cc8717a]:hover,
+.item.active[data-v-1cc8717a],
+.item[data-v-366547c7]:hover,
+.incident-group .incident-list .incident-item[data-v-f13238a3]:hover,
+.tags-list .tags-list-row[data-v-859764ea]:hover,
+.tag-monitors-list .tag-monitors-list-row[data-v-93b67aa4]:hover,
+.sort-item[data-v-bea7f612]:hover,
+.btn-outline-normal:hover,
+.filter-dropdown-status:hover,
+.timeslot:hover {
+  background-color: var(--claude-surface) !important;
+  border-color: var(--claude-border) !important;
+  box-shadow: none !important;
+}
+
+.item.under-maintenance[data-v-366547c7],
+.item.under-maintenance[data-v-366547c7]:hover {
+  background-color: var(--claude-surface) !important;
+  border-color: var(--claude-border) !important;
+}
+
+.bg-maintenance,
+.bg-maintenance[data-v-1c078f96],
+.bg-danger,
+.bg-success,
+.bg-up,
+.alert-success,
+.maintenance-bg-info[data-v-007873bc] {
+  background-color: var(--claude-surface) !important;
+  border-color: var(--claude-border) !important;
+}
+
+.sidebar .sidebar-footer[data-v-007873bc],
+.logo-wrapper .icon-upload[data-v-007873bc],
+.logo-wrapper .reset-top-left[data-v-007873bc],
+.sort-menu[data-v-bea7f612] {
+  background-color: var(--claude-surface) !important;
+  border-color: var(--claude-border) !important;
+  box-shadow: none !important;
+}
+
+.dark .sort-item[data-v-bea7f612],
+.dark .btn-outline-normal,
+.dark .filter-dropdown-status,
+.dark .btn-link[data-v-1c078f96],
+.dark .domain-name-list li .domain-input[data-v-007873bc] {
+  color: #2f2419 !important;
 }
 
 /* 可点击监控名更明显 */
 .monitor-list .item a {
-  transition: opacity 0.2s ease;
+  transition: none !important;
 }
 
 /* ==============================
@@ -331,4 +582,3 @@ footer {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
