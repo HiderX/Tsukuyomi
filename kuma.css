@@ -283,14 +283,15 @@ body.dark .monitor-list .item:hover {
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
-  color: #241a12 !important;
-  font-size: 0.8rem !important;
+  color: var(--claude-accent-text) !important;
+  font-size: 0.82rem !important;
   font-weight: 700 !important;
-  letter-spacing: -0.012em !important;
+  letter-spacing: -0.01em !important;
   line-height: 1 !important;
   box-shadow: none !important;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  opacity: 1 !important;
 }
 
 .monitor-list .info > .badge.rounded-pill::after,
@@ -303,7 +304,7 @@ body.dark .monitor-list .item:hover {
   width: 1px;
   height: 16px;
   transform: translateY(-50%);
-  background: rgba(116, 96, 73, 0.18);
+  background: rgba(162, 85, 59, 0.22);
 }
 
 /* ==============================
@@ -416,9 +417,6 @@ a:hover,
   box-shadow: none !important;
 }
 
-.overall-status .ok[data-v-007873bc],
-.overall-status .warning[data-v-007873bc],
-.overall-status .danger[data-v-007873bc],
 .link-active[data-v-1c078f96],
 .url[data-v-ce8053bd],
 .url a[data-v-ce8053bd],
@@ -427,6 +425,19 @@ a:hover,
 .status-maintenance[data-v-007873bc],
 .maintenance-bg-info[data-v-007873bc] {
   color: #2f2419 !important;
+}
+
+.overall-status .ok[data-v-007873bc] {
+  color: var(--claude-accent-text) !important;
+}
+
+.overall-status .warning[data-v-007873bc],
+.status-maintenance[data-v-007873bc] {
+  color: var(--claude-accent) !important;
+}
+
+.overall-status .danger[data-v-007873bc] {
+  color: var(--claude-accent-hover) !important;
 }
 
 .item.scheduled .circle[data-v-366547c7] {
@@ -547,6 +558,10 @@ select {
 /* ==============================
    隐藏不需要元素
 ============================== */
+h1.title-flex[data-v-007873bc]{
+  display: none !important;
+}
+
 h2.group-title[data-v-f71ca08e] {
   display: none !important;
 }
